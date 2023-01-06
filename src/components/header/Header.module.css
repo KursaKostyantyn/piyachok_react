@@ -1,0 +1,22 @@
+.Header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: aqua;
+}
+
+.HeaderName {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ButtonSection {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.Buttons {
+    width: 120px;
+    margin: 5px;
+}

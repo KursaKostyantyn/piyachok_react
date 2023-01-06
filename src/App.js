@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import {Routes, Route, Navigate} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import {MainLayout} from "./layouts";
+import {
+    AllNewsPage,
+    LoginFormPage,
+    MainNewsPage,
+    NotfoundPage,
+    PlaceFullInformationPage,
+    PlacesPage,
+    RegisterFormPage
+} from "./pages";
+import {LoginLayout} from "./layouts/loginLayout/LoginLayout";
+import {LoggedLayout} from "./layouts/loggedLayout/LoggedLayout";
+import {UsersPage} from "./pages/usersPage/UsersPage";
 
-export default App;
+
+const App = () => {
+    return (
+        <div>
+            <Routes>
+                <Route path={'/'} element={<LoginLayout/>}>
+                    <Route index element={<Navigate to={'login'}/>}/>
+                    <Route path={'login'} element={<LoginFormPage/>}/>
+                    <Route path={'register'} element={<RegisterFormPage/>}/>
+                </Route>
+
+                <Route path={'/main'} element={<MainLayout/>}>
+                    <Route path={'places'}>
+                        <Route path={''} element={<PlacesPage/>}/>
+                        <Route path={':id'} element={<PlaceFullInformationPage/>}/>
+                    </Route>
+                    <Route path={'news'}>
+                        <Route index element={<Navigate to={'mainNews'}/>}/>
+                        <Route path={'mainNews'} element={<MainNewsPage/>}/>
+                        <Route path={'allNews'} element={<AllNewsPage/>}/>
+                    </Route>
+                </Route>
+                <Route path={'/users'} element={<LoggedLayout/>}>
+                    <Route path={'/users'} element={<UsersPage/>}/>
+                </Route>
+
+                <Route path={'*'} element={<NotfoundPage/>}/>
+            </Routes>
+        </div>
+    )
+        ;
+};
+
+export {App};

@@ -1,0 +1,14 @@
+.Menu{
+    display: flex;
+    justify-content: center;
+}
+
+.Menu a{
+    text-decoration: none;
+    font-size: 30px ;
+    color: snow;
+    padding: 25px;
+}
+.Menu  a[class='active']{
+    color: black;
+}

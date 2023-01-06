@@ -1,0 +1,14 @@
+.Wrap{
+    display: flex;
+    flex-direction: column;
+    background: blue;
+}
+
+.InfoSection{
+    display: flex;
+    flex-direction: row;
+}
+
+.Filters{
+    margin-right: 5px;
+}
