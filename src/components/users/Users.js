@@ -1,7 +1,8 @@
-import {User} from "../user/User";
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
+
 import {userActions} from "../../redux";
+import {User} from "../user/User";
 
 const Users = () => {
     const dispatch = useDispatch();

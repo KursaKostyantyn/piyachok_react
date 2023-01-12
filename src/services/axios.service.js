@@ -23,8 +23,8 @@ axiosService.interceptors.response.use((config) => {
     },
     async (error) => {
         const refreshToken = authService.getRefreshToken();
-        authService.deleteAccessToken();
         if (error.response?.status === 401 && error.config && !isRefreshing && refreshToken) {
+            authService.deleteAccessToken();
             isRefreshing = true
             try {
                 const {data} = await authService.refresh({token:refreshToken});

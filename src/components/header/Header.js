@@ -1,8 +1,37 @@
+import {useLocation, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+
+import {authService} from "../../services";
+import {authActions} from "../../redux";
 import css from './Header.module.css'
-import {useNavigate} from "react-router-dom";
 
 const Header = () => {
     const navigate = useNavigate();
+    const {authorizedUser} = useSelector(state => state.auth);
+    const dispatch = useDispatch();
+    const [isAuth, setIsAuth] = useState(false);
+    const [isCabinet, setIsCabinet] = useState(false);
+
+    const location = useLocation();
+
+
+    useEffect(() => {
+        if (location.pathname.includes('myCabinet')) {
+            setIsCabinet(true);
+        } else {
+            setIsCabinet(false)
+        }
+    }, [location])
+
+    useEffect(() => {
+        if (authorizedUser === null) {
+            setIsAuth(false);
+        } else {
+            setIsAuth(true)
+        }
+
+    }, [authorizedUser])
 
     const login = () => {
         navigate("/login");
@@ -11,12 +40,32 @@ const Header = () => {
         navigate("/register")
     }
 
+    const exit = () => {
+        authService.deleteTokens();
+        dispatch(authActions.setAuthorizedUser(null));
+        navigate('/login')
+    }
+
+    const myCabinet = () => {
+        navigate('/myCabinet')
+    }
+
     return (
         <div className={css.Header}>
             <div className={css.HeaderName}>Пиячок</div>
             <div className={css.ButtonSection}>
-                <button className={css.Buttons} onClick={login}>Авторизуватися</button>
-                <button className={css.Buttons} onClick={register}>Зареєструватися</button>
+                {isAuth ?
+                    <div>
+                        {!isCabinet && <button className={css.Buttons} onClick={myCabinet}>Мій кабінет</button>}
+                        <button className={css.Buttons} onClick={exit}>Вихід</button>
+                    </div>
+
+                    :
+                    <div>
+                        <button className={css.Buttons} onClick={login}>Авторизуватися</button>
+                        <button className={css.Buttons} onClick={register}>Зареєструватися</button>
+                    </div>
+                }
             </div>
         </div>
     );

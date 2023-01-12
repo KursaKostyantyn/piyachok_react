@@ -24,7 +24,8 @@ const authService = {
     },
 
     getAccessToken: () => localStorage.getItem(_accessTokenKey),
-    getRefreshToken: () => localStorage.getItem(_refreshTokenKey)
+    getRefreshToken: () => localStorage.getItem(_refreshTokenKey),
+    getAuthorizedUser: () => axiosService.get(`${urls.getAuthorizedUser}`)
 
 
 }

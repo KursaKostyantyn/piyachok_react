@@ -1,0 +1,12 @@
+.Wrap{
+    display: flex;
+    flex-direction: row;
+}
+
+.CabinetMenu{
+    width: 20%;
+}
+
+.OutletPlace{
+    width: 80%;
+}

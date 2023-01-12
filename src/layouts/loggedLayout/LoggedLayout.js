@@ -1,6 +1,8 @@
-import {Header} from "../../components";
 import {Outlet} from "react-router-dom";
 import {useSelector} from "react-redux";
+
+import {CabinetMenu, Header} from "../../components";
+import css from './LoggedLayout.module.css'
 
 const LoggedLayout = () => {
 
@@ -9,7 +11,17 @@ const LoggedLayout = () => {
         <div>
             <Header/>
             {errors && JSON.stringify(errors)}
-            <Outlet/>
+            <div className={css.Wrap}>
+                <div className={css.CabinetMenu}>
+                    <CabinetMenu/>
+                </div>
+                <div className={css.OutletPlace}>
+                    <Outlet/>
+                </div>
+
+            </div>
+
+
         </div>
     );
 };

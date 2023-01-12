@@ -5,7 +5,7 @@ import {newsAction} from "../../redux";
 import {OneNews} from "../oneNews/OneNews";
 
 
-const News = ({findAllNews}) => {
+const News = ({findAllNews,}) => {
     const {news, currentNews} = useSelector(state => state.news);
     const dispatch = useDispatch();
     const [newUp, setNewUp] = useState(true);
@@ -18,7 +18,7 @@ const News = ({findAllNews}) => {
             dispatch(newsAction.findMainNews());
         }
 
-    }, [dispatch,findAllNews])
+    }, [dispatch, findAllNews])
 
 
     const newest = () => {
@@ -29,13 +29,12 @@ const News = ({findAllNews}) => {
         }
     }
 
-
     return (
 
         <div>
             {!currentNews ? <div>
-                    <button onClick={newest}>{newUp ? <span>Спочатку старі новини</span> :
-                        <span>Спочатку нові новини</span>}</button>
+                    <button onClick={newest}>{newUp ? <span>Спочатку нові новини</span> :
+                        <span>Спочатку старі новини</span>}</button>
                     {newUp ? news.slice(0).reverse().map(oneNews => <OneNews key={oneNews.id} oneNews={oneNews}
                                                                              details={true}/>) :
                         news.map(oneNews => <OneNews key={oneNews.id} oneNews={oneNews} details={true}/>)}

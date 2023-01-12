@@ -1,21 +1,30 @@
 import {Routes, Route, Navigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
 
-import {MainLayout} from "./layouts";
+import {MainLayout, LoggedLayout, LoginLayout} from "./layouts";
 import {
     AllNewsPage,
     LoginFormPage,
-    MainNewsPage,
+    MainNewsPage, CommentFullInformationPage, MyCommentsPage, MyNewsPage, MyPlacesPage,
     NotfoundPage,
     PlaceFullInformationPage,
     PlacesPage,
-    RegisterFormPage
+    RegisterFormPage, UserProfilePage,
+    UsersPage, MyRatingPage, RatingFullInformationPage, UserFullInformationPage
 } from "./pages";
-import {LoginLayout} from "./layouts/loginLayout/LoginLayout";
-import {LoggedLayout} from "./layouts/loggedLayout/LoggedLayout";
-import {UsersPage} from "./pages/usersPage/UsersPage";
+import {authActions} from "./redux";
+import {FavoritePlaces} from "./components";
 
 
 const App = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(authActions.getAuthorizedUser())
+    }, [dispatch])
+
     return (
         <div>
             <Routes>
@@ -36,8 +45,33 @@ const App = () => {
                         <Route path={'allNews'} element={<AllNewsPage/>}/>
                     </Route>
                 </Route>
-                <Route path={'/users'} element={<LoggedLayout/>}>
-                    <Route path={'/users'} element={<UsersPage/>}/>
+                <Route path={'/myCabinet'} element={<LoggedLayout/>}>
+                    <Route index element={<Navigate to={'profile'}/>}/>
+                    <Route path={'profile'} element={<UserProfilePage/>}/>
+                    <Route path={'myNews'} element={<MyNewsPage/>}/>
+                    <Route path={'myPlaces'}>
+                        <Route path={''} element={<MyPlacesPage/>}/>
+                        <Route path={':id'} element={<PlaceFullInformationPage/>}/>
+                    </Route>
+                    <Route path={'favoritePlaces'}>
+                        <Route path={''} element={<FavoritePlaces/>}/>
+                        <Route path={':id'} element={<PlaceFullInformationPage/>}/>
+                    </Route>
+                    <Route path={'myComments'}>
+                        <Route path={''} element={<MyCommentsPage/>}/>
+                        <Route path={':id'} element={<CommentFullInformationPage/>}/>
+                    </Route>
+                    <Route path={'myRatings'}>
+                        <Route path={''} element={<MyRatingPage/>}/>
+                        <Route path={':id'} element={<RatingFullInformationPage/>}/>
+                    </Route>
+                    <Route path={'allUsers'}>
+                        <Route path={''} element={<UsersPage/>}/>
+                        <Route path={':id'} element={<UserFullInformationPage/>}/>
+                    </Route>
+
+
+                    <Route path={'users'} element={<UsersPage/>}/>
                 </Route>
 
                 <Route path={'*'} element={<NotfoundPage/>}/>

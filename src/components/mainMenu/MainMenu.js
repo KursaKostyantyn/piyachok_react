@@ -1,8 +1,8 @@
 import {NavLink} from "react-router-dom";
 
-import css from './Menu.module.css'
+import css from './MainMenu.module.css'
 
-const Menu = () => {
+const MainMenu = () => {
     return (
         <div className={css.Menu}>
             <NavLink to={'search'}>Пошук</NavLink>
@@ -12,4 +12,4 @@ const Menu = () => {
     );
 };
 
-export {Menu};
+export {MainMenu};

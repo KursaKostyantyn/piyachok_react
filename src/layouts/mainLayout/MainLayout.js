@@ -1,6 +1,6 @@
 import {Outlet} from "react-router-dom";
 
-import {Header, Menu} from "../../components";
+import {Header, MainMenu} from "../../components";
 import css from './MainLayout.module.css'
 
 
@@ -10,7 +10,7 @@ const MainLayout = () => {
             <div>
                 <Header/>
             </div>
-            <div><Menu/></div>
+            <div><MainMenu/></div>
             <div className={css.InfoSection}>
                     <div><Outlet/></div>
             </div>

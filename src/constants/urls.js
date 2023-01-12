@@ -8,7 +8,11 @@ const urls={
     allNews:'/main/news/allNews',
     login:'/login',
     register:'/register',
-    refresh:'/refresh'
+    refresh:'/refresh',
+    getAuthorizedUser:'/getAuthorizedUser',
+    favoritePlaces:'/myCabinet/favoritePlaces',
+    myComments:'/myCabinet/myComments',
+    myRatings:'/myCabinet/myRatings'
 }
 
 export {

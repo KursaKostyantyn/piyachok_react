@@ -14,7 +14,7 @@ const LoginForm = () => {
     const submit = async (data) => {
         const {error} = await dispatch(authActions.login({user: data}));
         if(!error){
-            navigate("/main/places")
+            navigate("/myCabinet/profile")
         }
     }
 

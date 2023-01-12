@@ -3,7 +3,7 @@ import {Places} from "../../components/index";
 const PlacesPage = () => {
     return (
         <div>
-            <Places/>
+            <Places isMyPlaces={false}/>
         </div>
     );
 };

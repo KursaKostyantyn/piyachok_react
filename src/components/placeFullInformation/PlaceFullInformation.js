@@ -10,28 +10,26 @@ import {OneNews} from "../oneNews/OneNews";
 const PlaceFullInformation = () => {
     const {id} = useParams();
     const {currentPlace} = useSelector(state => state.places);
-    const {news, currentNews} = useSelector(state => state.news);
-    const [place, setPlace] = useState(null);
+    const {currentNews} = useSelector(state => state.news);
+
     const dispatch = useDispatch();
+
     const [currentPlaceNews, setCurrentPlaceNews] = useState([]);
     const [newUp, setNewUp] = useState(true);
+    const [place, setPlace] = useState(null);
+
 
     useEffect(() => {
         dispatch(placeActions.findPlaceById(id))
-        dispatch(newsAction.findAllNews())
     }, [dispatch])
 
-    useEffect(() => {
-        setPlace(currentPlace)
-        if (currentPlace !== null && news.length !== 0) {
-            const n = []
-            for (let i = 0; i < currentPlace.newsIds.length; i++) {
-                n.push(news.find(item => item.id === currentPlace.newsIds[i]))
-            }
-            setCurrentPlaceNews(n)
-        }
 
-    }, [currentPlace, news])
+    useEffect(() => {
+        if(currentPlace!==null){
+            setPlace(currentPlace)
+            setCurrentPlaceNews(currentPlace.news)
+        }
+    }, [currentPlace])
 
     const newest = () => {
         if (newUp) {
@@ -72,10 +70,12 @@ const PlaceFullInformation = () => {
 
             {!currentNews ?
                 <div>
+
                     <button onClick={newest}>{newUp ? <span>Спочатку старі новини</span> :
                         <span>Спочатку нові новини</span>}</button>
                     {newUp ? currentPlaceNews.slice(0).reverse().map(oneNews => <OneNews key={oneNews.id}
-                                                                                         oneNews={oneNews} details={true}/>) :
+                                                                                         oneNews={oneNews}
+                                                                                         details={true}/>) :
                         currentPlaceNews.map(oneNews => <OneNews key={oneNews.id} oneNews={oneNews} details={true}/>)}
                 </div> :
                 <div>
