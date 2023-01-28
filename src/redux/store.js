@@ -7,7 +7,7 @@ import {
     placeReducer,
     favoritePlacesReducer,
     commentsReducer,
-    ratingReducer
+    ratingReducer, typeReducer
 } from "./slices";
 
 
@@ -18,7 +18,8 @@ const rootReducer = combineReducers({
     users: userReducer,
     favoritePlaces: favoritePlacesReducer,
     comments:commentsReducer,
-    ratings: ratingReducer
+    ratings: ratingReducer,
+    types: typeReducer
 });
 
 const setupStore = configureStore({

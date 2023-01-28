@@ -11,7 +11,7 @@ export * from './allNews/AllNews';
 export * from './loginForm/LoginForm';
 export * from './registerForm/RegisterForm';
 export * from './users/Users';
-export * from './userFullInformation/UserFullInformation';
+export * from './userProfile/UserProfile';
 export * from './cabinetMenu/CabinetMenu';
 export * from './myNews/MyNews';
 export * from './favoritePlaces/FavoritePlaces';
@@ -21,4 +21,10 @@ export * from './commentFullInformation/CommentFullInformation';
 export * from './myRatings/MyRatings';
 export * from './rating/Rating';
 export * from './ratingFullInformation/RatingFullInformation';
-export  * from './user/User'
+export  * from './user/User';
+export * from './oneNewsFullInformation/OneNewsFullInformation';
+export * from './placeNews/PlaceNews';
+export * from './typesForCheckBox/TypesForCheckBox';
+export * from './typeCheckBox/TypeCheckBox';
+export * from './newsForm/NewsForm';
+

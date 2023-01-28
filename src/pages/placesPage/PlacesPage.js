@@ -1,9 +1,10 @@
 import {Places} from "../../components/index";
+import {Outlet} from "react-router-dom";
 
 const PlacesPage = () => {
     return (
         <div>
-            <Places isMyPlaces={false}/>
+            <Places/>
         </div>
     );
 };

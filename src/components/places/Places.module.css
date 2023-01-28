@@ -1,5 +1,12 @@
 .Wrap{
     display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.PlaceSection{
+
+    display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
 }

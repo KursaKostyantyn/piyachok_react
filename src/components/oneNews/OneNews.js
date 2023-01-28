@@ -1,15 +1,14 @@
-import {newsAction} from "../../redux";
-
-import {useDispatch} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 
 const OneNews = ({oneNews, details}) => {
     const {id, category, creationDate, text, placeName} = oneNews;
-    const dispatch = useDispatch();
 
+    const navigate = useNavigate();
+    console.log(oneNews)
 
     const setCurrentNews = () => {
-        dispatch(newsAction.setCurrentNews(oneNews))
+        navigate(`news/${id}`)
     }
 
 
@@ -21,7 +20,6 @@ const OneNews = ({oneNews, details}) => {
             <div>Дата новини: {creationDate}</div>
             <div>Текст: {text}</div>
             {details && <button onClick={setCurrentNews}>Деталі новини </button>}
-
             <hr/>
         </div>
     );

@@ -1,13 +1,16 @@
 import {useNavigate} from "react-router-dom";
 
 import css from './CabinetMenu.module.css'
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
+import {newsAction} from "../../redux";
 
 const CabinetMenu = () => {
     const navigate = useNavigate();
     const {authorizedUser} = useSelector(state => state.auth);
     const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+    const dispatch = useDispatch();
+    const {currentNews} = useSelector(state => state.news);
 
     useEffect(()=>{
         if (authorizedUser!==null && authorizedUser.role.split('_')[1]==='SUPERADMIN'){
@@ -30,6 +33,9 @@ const CabinetMenu = () => {
     }
 
     const myNews=()=>{
+        console.log(currentNews)
+        dispatch(newsAction.setCurrentNews(null));
+        console.log(currentNews)
         navigate('myNews')
     }
 

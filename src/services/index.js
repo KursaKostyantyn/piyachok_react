@@ -6,4 +6,5 @@ export * from './axios.service'
 export * from './favoritePlaces.service';
 export * from './comment.service';
 export * from './rating.service';
+export * from './type.service'
 

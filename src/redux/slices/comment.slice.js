@@ -20,6 +20,18 @@ const findCommentsByUserLogin = createAsyncThunk(
     }
 );
 
+const findCommentById = createAsyncThunk(
+    'commentsSlice/findCommentById',
+    async ({id},{rejectWithValue})=>{
+        try {
+            const {data} = await commentService.findCommentById(id);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 const commentsSlice = createSlice({
     name: 'commentsSlice',
     initialState,
@@ -30,6 +42,13 @@ const commentsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(findCommentById.fulfilled,(state, action) => {
+                state.errors=null;
+                state.currentComment= action.payload;
+            })
+            .addCase(findCommentById.rejected,(state, action) => {
+                state.errors = action.payload;
+            })
             .addCase(findCommentsByUserLogin.fulfilled, (state, action) => {
                 state.errors = null;
                 state.comments = action.payload;
@@ -44,7 +63,8 @@ const {reducer: commentsReducer, actions:{setCurrentComment}} = commentsSlice;
 
 const commentsActions = {
     findCommentsByUserLogin,
-    setCurrentComment
+    setCurrentComment,
+    findCommentById
 }
 
 export {

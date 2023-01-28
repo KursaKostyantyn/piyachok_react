@@ -19,6 +19,42 @@ const findAllUsers = createAsyncThunk(
     }
 );
 
+const updateUserById = createAsyncThunk(
+    'userSlice/updateUserById',
+    async ({id, user}, {rejectWithValue}) => {
+        try {
+            console.log("id = ", id)
+            console.log("data = ", user)
+            const {data} = await userService.updateUserById(id, user);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data);
+        }
+    }
+);
+
+const findUserById = createAsyncThunk(
+    'userSlice/findUserById',
+    async ({id}, {rejectWithValue}) => {
+        try {
+            const {data} = await userService.findUserById(id);
+            return data
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+const deleteUserById = createAsyncThunk(
+    'userSlice/deleteUserById',
+    async ({id},{rejectWithValue})=>{
+        try {
+            const {data} = await userService.deleteUserById(id);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
 
 const userSlice = createSlice({
     name: 'userSlice',
@@ -30,6 +66,28 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(deleteUserById.fulfilled,(state, action) => {
+                state.errors=null;
+            })
+            .addCase(deleteUserById.rejected, (state, action) => {
+                state.erros=action.payload;
+            })
+            .addCase(findUserById.fulfilled, (state, action) => {
+                state.errors = null;
+                state.currentUser = action.payload;
+            })
+            .addCase(findUserById.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
+
+            .addCase(updateUserById.fulfilled, (state, action) => {
+                state.errors = null;
+                state.currentUser=action.payload;
+
+            })
+            .addCase(updateUserById.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
             .addCase(findAllUsers.fulfilled, (state, action) => {
                 state.errors = null;
                 state.users = action.payload;
@@ -41,11 +99,15 @@ const userSlice = createSlice({
     }
 });
 
+
 const {reducer: userReducer, actions: {setCurrentUser}} = userSlice;
 
 const userActions = {
     findAllUsers,
-    setCurrentUser
+    setCurrentUser,
+    updateUserById,
+    findUserById,
+    deleteUserById
 
 }
 

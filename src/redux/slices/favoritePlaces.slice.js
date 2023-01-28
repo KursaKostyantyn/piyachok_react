@@ -6,11 +6,23 @@ const initialState = {
     errors: null,
 }
 
-const getFavoritePlacesByUserId = createAsyncThunk(
-    'favoritePlacesSlice/getFavoritePlacesByUserId',
-    async ({id}, {rejectWithValue}) => {
+const getFavoritePlacesByUserLogin = createAsyncThunk(
+    'favoritePlacesSlice/getFavoritePlacesByUserLogin',
+    async ({login}, {rejectWithValue}) => {
         try {
-            const {data} = await favoritePlacesService.getFavoritePlacesByUserId(id);
+            const {data} = await favoritePlacesService.getFavoritePlacesByUserLogin(login);
+            return data
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const addPlaceToFavoriteByPlaceIdAndUserLogin = createAsyncThunk(
+    'favoritePlacesSlice/addPlaceToFavoriteByPlaceIdAndUserLogin',
+    async ({placeId,login},{rejectWithValue})=>{
+        try {
+            const {data} = await favoritePlacesService.addPlaceToFavoriteByPlaceIdAndUserLogin(placeId,login);
             return data
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -25,11 +37,17 @@ const favoritePlacesSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(getFavoritePlacesByUserId.fulfilled, (state, action) => {
+            .addCase(addPlaceToFavoriteByPlaceIdAndUserLogin.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
+            .addCase(addPlaceToFavoriteByPlaceIdAndUserLogin.fulfilled,(state, action) => {
+                state.errors=null;
+            })
+            .addCase(getFavoritePlacesByUserLogin.fulfilled, (state, action) => {
                 state.errors = null;
                 state.favoritePlaces = action.payload;
             })
-            .addCase(getFavoritePlacesByUserId.rejected, (state, action) => {
+            .addCase(getFavoritePlacesByUserLogin.rejected, (state, action) => {
                 state.errors = action.payload;
             })
 
@@ -40,7 +58,8 @@ const favoritePlacesSlice = createSlice({
 const {reducer: favoritePlacesReducer, actions} = favoritePlacesSlice;
 
 const favoritePlacesAction = {
-    getFavoritePlacesByUserId
+    getFavoritePlacesByUserLogin,
+    addPlaceToFavoriteByPlaceIdAndUserLogin
 }
 
 export {

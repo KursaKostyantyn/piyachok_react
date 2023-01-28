@@ -12,7 +12,7 @@ const dispatch = useDispatch();
 
     useEffect(()=>{
         if(authorizedUser!==null){
-            dispatch(favoritePlacesAction.getFavoritePlacesByUserId({id:authorizedUser.id}))
+            dispatch(favoritePlacesAction.getFavoritePlacesByUserLogin({login:authorizedUser.login}))
         }
     },[dispatch,authorizedUser])
 

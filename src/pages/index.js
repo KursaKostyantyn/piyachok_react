@@ -18,3 +18,10 @@ export * from './commentFullInformationPage/CommentFullInformationPage';
 export * from './myRatingsPage/MyRatingPage';
 export * from './ratingFullInformationPage/RatingFullInformationPage';
 export * from './userFullInformationPage/UserFullInformationPage';
+export * from './oneNewsPage/OneNewsPage';
+export * from './placeNewsPage/PlaceNewsPage';
+export * from './oneNewsFullInformationPage/OneNewsFullInformationPage';
+export * from './placeFormPage/PlaceFormPage';
+export * from './newsFormPage/NewsFormPage';
+
+

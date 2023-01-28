@@ -1,47 +1,59 @@
-import {useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 
-import {newsAction, placeActions} from "../../redux";
+import {favoritePlacesAction, placeActions} from "../../redux";
 import css from "./PlaceFullInformation.module.css";
-import {OneNews} from "../oneNews/OneNews";
 
 
 const PlaceFullInformation = () => {
-    const {id} = useParams();
+    const params = useParams();
     const {currentPlace} = useSelector(state => state.places);
-    const {currentNews} = useSelector(state => state.news);
-
+    //todo delete
+    // const {currentNews} = useSelector(state => state.news);
+    const {authorizedUser} = useSelector(state => state.auth);
+    const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const [currentPlaceNews, setCurrentPlaceNews] = useState([]);
-    const [newUp, setNewUp] = useState(true);
     const [place, setPlace] = useState(null);
+    const location = useLocation();
+    const [canEdit, setCanEdit] = useState(false);
 
 
     useEffect(() => {
-        dispatch(placeActions.findPlaceById(id))
+        if (authorizedUser !== null && authorizedUser.id === currentPlace.userId) {
+            setCanEdit(true)
+        } else {
+            setCanEdit(false)
+        }
+    }, [])
+
+    useEffect(() => {
+        dispatch(placeActions.findPlaceById({id: params.placeId}))
     }, [dispatch])
 
 
     useEffect(() => {
-        if(currentPlace!==null){
+        if (currentPlace !== null) {
             setPlace(currentPlace)
-            setCurrentPlaceNews(currentPlace.news)
         }
     }, [currentPlace])
 
-    const newest = () => {
-        if (newUp) {
-            setNewUp(false)
-        } else {
-            setNewUp(true)
-        }
+    const deletePlace = async () => {
+        await dispatch(placeActions.deletePlaceById({id: place.id}))
+        navigate('/myCabinet/myPlaces')
     }
 
-    const allNews = () => {
-        dispatch(newsAction.setCurrentNews(null))
+    const updatePlace = () => {
+        navigate('update')
     }
+
+    const addToFavorites = async () => {
+        await dispatch(favoritePlacesAction.addPlaceToFavoriteByPlaceIdAndUserLogin({
+            placeId: place.id,
+            login: authorizedUser.login
+        }))
+    }
+
 
     return (
         <div>
@@ -66,24 +78,16 @@ const PlaceFullInformation = () => {
                 <div>type: {place.type}</div>
                 <div>description: {place.description}</div>
             </div>}
+            {canEdit &&
+                <div>
+                    <button onClick={updatePlace}>Редагувати заклад</button>
+                    <button onClick={deletePlace}>Видалити заклад</button>
+                </div>}
+            {authorizedUser &&
+                <div>
+                    <button onClick={addToFavorites}>Додати до улюблених</button>
+                </div>}
             <h3>Новини закладу</h3>
-
-            {!currentNews ?
-                <div>
-
-                    <button onClick={newest}>{newUp ? <span>Спочатку старі новини</span> :
-                        <span>Спочатку нові новини</span>}</button>
-                    {newUp ? currentPlaceNews.slice(0).reverse().map(oneNews => <OneNews key={oneNews.id}
-                                                                                         oneNews={oneNews}
-                                                                                         details={true}/>) :
-                        currentPlaceNews.map(oneNews => <OneNews key={oneNews.id} oneNews={oneNews} details={true}/>)}
-                </div> :
-                <div>
-                    <button onClick={allNews}>Показати всі новини</button>
-                    <OneNews key={currentNews.id} oneNews={currentNews} details={false}/>
-                </div>
-            }
-
 
         </div>
     );

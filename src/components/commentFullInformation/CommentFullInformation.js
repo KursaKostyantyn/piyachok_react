@@ -1,15 +1,29 @@
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {useParams} from "react-router-dom";
+import {useEffect} from "react";
+import {commentsActions} from "../../redux";
 
 const CommentFullInformation = () => {
     const {currentComment} = useSelector(state => state.comments);
+    const dispatch = useDispatch();
+    const params = useParams();
 
-    const {id, text, place} = currentComment;
+    useEffect(() => {
+        dispatch(commentsActions.findCommentById({id:params.myCommentsId}))
+    }, [dispatch])
+
 
     return (
-        <div>
-            <div>id: {id}</div>
-            <div>Назва закладу: {place.name}</div>
-            <div>Коментарій: {text}</div>
+        <div>{
+            currentComment &&
+            <div>
+                <div>id: {currentComment.id}</div>
+                <div>Назва закладу: {currentComment.place.name}</div>
+                <div>Коментарій: {currentComment.text}</div>
+            </div>
+
+        }
+
         </div>
     );
 };

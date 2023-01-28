@@ -5,3 +5,4 @@ export * from './user.slice'
 export * from './favoritePlaces.slice';
 export * from './comment.slice';
 export * from './rating.slice';
+export * from './type.slice';

@@ -1,4 +1,4 @@
-import {UserFullInformation} from "../../components";
+import {User, UserProfile} from "../../components";
 import {useSelector} from "react-redux";
 
 const UserProfilePage = () => {
@@ -6,7 +6,7 @@ const UserProfilePage = () => {
 
     return (
         <div>
-            {authorizedUser && <UserFullInformation user={authorizedUser}/>}
+            {authorizedUser && <User user={authorizedUser}/>}
         </div>
     );
 };

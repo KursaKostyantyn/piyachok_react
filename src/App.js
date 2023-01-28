@@ -1,20 +1,28 @@
-import {Routes, Route, Navigate} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 
-import {MainLayout, LoggedLayout, LoginLayout} from "./layouts";
+import {LoggedLayout, LoginLayout, MainLayout} from "./layouts";
 import {
     AllNewsPage,
+    CommentFullInformationPage,
     LoginFormPage,
-    MainNewsPage, CommentFullInformationPage, MyCommentsPage, MyNewsPage, MyPlacesPage,
+    MainNewsPage,
+    MyCommentsPage,
+    MyNewsPage,
+    MyPlacesPage,
+    MyRatingPage,
     NotfoundPage,
     PlaceFullInformationPage,
+    PlaceNewsPage,
     PlacesPage,
-    RegisterFormPage, UserProfilePage,
-    UsersPage, MyRatingPage, RatingFullInformationPage, UserFullInformationPage
+    RatingFullInformationPage,
+    RegisterFormPage,
+    UsersPage,
+    UserProfilePage, UserFullInformationPage, OneNewsFullInformationPage, PlaceFormPage, NewsFormPage
 } from "./pages";
 import {authActions} from "./redux";
-import {FavoritePlaces} from "./components";
+import {FavoritePlaces, OneNewsFullInformation} from "./components";
 
 
 const App = () => {
@@ -29,7 +37,7 @@ const App = () => {
         <div>
             <Routes>
                 <Route path={'/'} element={<LoginLayout/>}>
-                    <Route index element={<Navigate to={'login'}/>}/>
+                    <Route index element={<Navigate to={'/main/places'}/>}/>
                     <Route path={'login'} element={<LoginFormPage/>}/>
                     <Route path={'register'} element={<RegisterFormPage/>}/>
                 </Route>
@@ -37,37 +45,74 @@ const App = () => {
                 <Route path={'/main'} element={<MainLayout/>}>
                     <Route path={'places'}>
                         <Route path={''} element={<PlacesPage/>}/>
-                        <Route path={':id'} element={<PlaceFullInformationPage/>}/>
+                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
+                            <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformation/>}/>
+                        </Route>
                     </Route>
                     <Route path={'news'}>
                         <Route index element={<Navigate to={'mainNews'}/>}/>
-                        <Route path={'mainNews'} element={<MainNewsPage/>}/>
-                        <Route path={'allNews'} element={<AllNewsPage/>}/>
+                        <Route path={'mainNews'}>
+                            <Route path={''} element={<MainNewsPage/>}/>
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformation/>}/>
+                        </Route>
+                        <Route path={'allNews'}>
+                            <Route path={''} element={<AllNewsPage/>}/>
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformation/>}/>
+                        </Route>
+
                     </Route>
                 </Route>
                 <Route path={'/myCabinet'} element={<LoggedLayout/>}>
                     <Route index element={<Navigate to={'profile'}/>}/>
-                    <Route path={'profile'} element={<UserProfilePage/>}/>
-                    <Route path={'myNews'} element={<MyNewsPage/>}/>
-                    <Route path={'myPlaces'}>
-                        <Route path={''} element={<MyPlacesPage/>}/>
-                        <Route path={':id'} element={<PlaceFullInformationPage/>}/>
+                    <Route path={'profile'}>
+                        <Route path={':userId'} element={<UserFullInformationPage/>}/>
+                        <Route path={''} element={<UserProfilePage/>}/>
                     </Route>
+
+                    <Route path={'createPlace'} element={<PlaceFormPage/>}/>
+
+                    <Route path={'myNews'}>
+                        <Route path={''} element={<MyNewsPage/>}/>
+                        <Route path={'news/:newsId'}>
+                            <Route path={'update'} element={<NewsFormPage/>}/>
+                            <Route path={''} element={<OneNewsFullInformation/>}/>
+                        </Route>
+
+                    </Route>
+
+                    <Route path={'myPlaces'}>
+                        <Route path={':placeId/update'} element={<PlaceFormPage/>}/>
+
+                        //todo delete
+                        {/*<Route path={'update'} element={<PlaceFormPage/>}/>*/}
+                        <Route path={''} element={<MyPlacesPage/>}/>
+
+                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
+                            <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'addNews'} element={<NewsFormPage/>}/>
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
+                        </Route>
+                    </Route>
+
                     <Route path={'favoritePlaces'}>
                         <Route path={''} element={<FavoritePlaces/>}/>
-                        <Route path={':id'} element={<PlaceFullInformationPage/>}/>
+                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}/>
                     </Route>
+
                     <Route path={'myComments'}>
                         <Route path={''} element={<MyCommentsPage/>}/>
-                        <Route path={':id'} element={<CommentFullInformationPage/>}/>
+                        <Route path={':myCommentsId'} element={<CommentFullInformationPage/>}/>
                     </Route>
+
                     <Route path={'myRatings'}>
                         <Route path={''} element={<MyRatingPage/>}/>
-                        <Route path={':id'} element={<RatingFullInformationPage/>}/>
+                        <Route path={':myRatingsId'} element={<RatingFullInformationPage/>}/>
                     </Route>
+
                     <Route path={'allUsers'}>
                         <Route path={''} element={<UsersPage/>}/>
-                        <Route path={':id'} element={<UserFullInformationPage/>}/>
+                        <Route path={':userId'} element={<UserProfilePage/>}/>
                     </Route>
 
 

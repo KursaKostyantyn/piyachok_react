@@ -4,30 +4,53 @@ import {useEffect, useState} from "react";
 import {placeActions} from "../../redux";
 import {PlaceShortInformation} from "../placeShortInformation";
 import css from './Places.module.css'
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
 
-const Places = ({isMyPlaces}) => {
-    const {places} = useSelector(state => state.places);
+const Places = () => {
+    const {places, previousPage, nextPage, amountOfPages,currentPage} = useSelector(state => state.places);
     const {authorizedUser} = useSelector(state => state.auth);
-    const [placesForRender, setPlacesForRender] = useState([]);
-
     const dispatch = useDispatch();
+    const [query, setQuery] = useSearchParams({page: '1'});
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [isMyCabinet,setIsMyCabinet] = useState(false);
 
 
     useEffect(() => {
-        if (isMyPlaces && authorizedUser !== null) {
-            setPlacesForRender(authorizedUser.places)
+        dispatch(placeActions.findAllPlaces({page: query.get('page')}));
+        if(location.pathname.includes('myCabinet')){
+            setIsMyCabinet(true)
         } else {
-
-            dispatch(placeActions.findAllPlaces())
-            setPlacesForRender(places)
+            setIsMyCabinet(false)
         }
-    }, [dispatch,authorizedUser])
+    }, [query])
 
+
+    const goToPreviousPage = () => {
+        const page = +query.get('page') - 1;
+        setQuery({page: `${page}`})
+    };
+
+    const goToNextPage = () => {
+        const page = +query.get('page') + 1;
+        setQuery({page: `${page}`})
+    };
+    const addPlace=()=>{
+        navigate('/myCabinet/createPlace')
+    }
 
     return (
         <div className={css.Wrap}>
-            {placesForRender.map((place) => <PlaceShortInformation key={place.id} place={place}/>)}
+            <div>{isMyCabinet && authorizedUser && <button onClick={addPlace}>Додати заклад</button>}</div>
+            <div>
+                <button disabled={previousPage === 0} onClick={goToPreviousPage}>Попередня сторінка</button>
+                <span>Сторінка {currentPage} з {amountOfPages} </span>
+                <button disabled={nextPage === 0} onClick={goToNextPage}>Наступна сторінка</button>
+            </div>
+            <div className={css.PlaceSection}>
+                {places.map((place) => <PlaceShortInformation key={place.id} place={place}/>)}
+            </div>
         </div>
     );
 };

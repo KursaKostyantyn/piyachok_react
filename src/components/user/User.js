@@ -19,7 +19,7 @@ const User = ({user}) => {
             <div>Логін: {login}</div>
             <div>Ім'я: {firstName}</div>
             <div>Прізвище: {lastName}</div>
-            <div>Роль: {role}</div>
+            <div>Роль: {role.split('_')[1]}</div>
             <button onClick={currentUser}>Деталі</button>
         </div>
     );
