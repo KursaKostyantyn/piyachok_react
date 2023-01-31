@@ -51,6 +51,9 @@ const authSlice = createSlice({
     reducers: {
         setAuthorizedUser: (state, action) => {
             state.authorizedUser = action.payload;
+        },
+        setErrors: (state, action) => {
+            state.errors = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -72,19 +75,19 @@ const authSlice = createSlice({
                 state.authorizedUser = action.payload.userDTO;
             })
             .addCase(login.rejected, (state, action) => {
-                state.errors = action.payload;
-                console.log(action.payload)
+                state.errors=action.payload
             })
     }
 });
 
-const {reducer: authReducer, actions: {setAuthorizedUser}} = authSlice
+const {reducer: authReducer, actions: {setAuthorizedUser, setErrors}} = authSlice
 
 const authActions = {
     register,
     login,
     getAuthorizedUser,
-    setAuthorizedUser
+    setAuthorizedUser,
+    setErrors
 
 }
 

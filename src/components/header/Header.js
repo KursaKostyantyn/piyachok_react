@@ -48,10 +48,12 @@ const Header = () => {
 
     }, [authorizedUser])
 
-    const login = () => {
+    const login =async () => {
+        await dispatch(authActions.setErrors(null))
         navigate("/login");
     }
-    const register = () => {
+    const register =async () => {
+        await dispatch(authActions.setErrors(null))
         navigate("/register")
     }
 
