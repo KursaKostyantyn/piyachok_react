@@ -5,7 +5,6 @@ const OneNews = ({oneNews, details}) => {
     const {id, category, creationDate, text, placeName} = oneNews;
 
     const navigate = useNavigate();
-    console.log(oneNews)
 
     const setCurrentNews = () => {
         navigate(`news/${id}`)

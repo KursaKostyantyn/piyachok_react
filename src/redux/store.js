@@ -5,7 +5,6 @@ import {
     userReducer,
     newsReducer,
     placeReducer,
-    favoritePlacesReducer,
     commentsReducer,
     ratingReducer, typeReducer
 } from "./slices";
@@ -16,8 +15,7 @@ const rootReducer = combineReducers({
     news: newsReducer,
     auth: authReducer,
     users: userReducer,
-    favoritePlaces: favoritePlacesReducer,
-    comments:commentsReducer,
+    comments: commentsReducer,
     ratings: ratingReducer,
     types: typeReducer
 });

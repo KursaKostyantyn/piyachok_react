@@ -12,7 +12,7 @@ const LoginLayout = () => {
         <div>
             <Header/>
             <Outlet/>
-            {errors && <span>{JSON.stringify(errors)}</span>}
+            {errors && <span>{errors.msg}</span>}
         </div>
     );
 };

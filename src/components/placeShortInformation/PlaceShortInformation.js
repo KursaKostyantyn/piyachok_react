@@ -7,7 +7,7 @@ const PlaceShortInformation = ({place}) => {
     const navigate = useNavigate();
 
     const placeDetails = () => {
-        navigate(`${place.id}`)
+        navigate(`${place.id}/news`)
     }
 
     return (

@@ -14,7 +14,7 @@ const OneNewsFullInformation = () => {
 
 
     useEffect(() => {
-        if (location.pathname.includes('myCabinet')) {
+        if (location.pathname.includes('myCabinet') && !location.pathname.includes('favoritePlaces')) {
             setIsCabinet(true);
         }
     }, [dispatch])

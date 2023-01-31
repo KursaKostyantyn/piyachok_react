@@ -1,18 +1,19 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 
-import {favoritePlacesAction} from "../../redux";
+import {userActions} from "../../redux";
 import {PlaceShortInformation} from "../placeShortInformation";
 import css from './FavoritePlaces.module.css'
 
 const FavoritePlaces = () => {
-    const {favoritePlaces} = useSelector(state => state.favoritePlaces);
+    const {favoritePlaces} = useSelector(state => state.users);
     const {authorizedUser} = useSelector(state => state.auth);
 const dispatch = useDispatch();
 
     useEffect(()=>{
         if(authorizedUser!==null){
-            dispatch(favoritePlacesAction.getFavoritePlacesByUserLogin({login:authorizedUser.login}))
+            dispatch(userActions.getFavoritePlacesByUserLogin({login:authorizedUser.login}))
+
         }
     },[dispatch,authorizedUser])
 

@@ -11,10 +11,12 @@ const urls={
     register:'/register',
     refresh:'/refresh',
     getAuthorizedUser:'/getAuthorizedUser',
-    favoritePlaces:'/myCabinet/favoritePlaces',
     myComments:'/myCabinet/myComments',
     myRatings:'/myCabinet/myRatings',
-    types:'/types'
+    types:'/types',
+    comments:'/comments',
+    ratings:'/ratings',
+    activate:'/activate'
 }
 
 export {

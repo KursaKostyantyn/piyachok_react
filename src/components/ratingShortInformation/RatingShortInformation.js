@@ -2,7 +2,7 @@ import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
 import {ratingActions} from "../../redux";
 
-const Rating = ({rating}) => {
+const RatingShortInformation = ({rating}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -24,4 +24,4 @@ const Rating = ({rating}) => {
     );
 };
 
-export {Rating};
+export {RatingShortInformation};

@@ -19,7 +19,7 @@ export * from './myComments/MyComments';
 export * from './comment/Comment';
 export * from './commentFullInformation/CommentFullInformation';
 export * from './myRatings/MyRatings';
-export * from './rating/Rating';
+export * from './ratingShortInformation/RatingShortInformation';
 export * from './ratingFullInformation/RatingFullInformation';
 export  * from './user/User';
 export * from './oneNewsFullInformation/OneNewsFullInformation';
@@ -27,4 +27,8 @@ export * from './placeNews/PlaceNews';
 export * from './typesForCheckBox/TypesForCheckBox';
 export * from './typeCheckBox/TypeCheckBox';
 export * from './newsForm/NewsForm';
-
+export * from './commentForm/CommentForm';
+export * from './comments/comments';
+export * from './placeRating/PlaceRating';
+export * from './ratingForm/RatingForm';
+export * from './activateUser/ActivateUser';

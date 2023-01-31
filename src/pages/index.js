@@ -23,5 +23,9 @@ export * from './placeNewsPage/PlaceNewsPage';
 export * from './oneNewsFullInformationPage/OneNewsFullInformationPage';
 export * from './placeFormPage/PlaceFormPage';
 export * from './newsFormPage/NewsFormPage';
+export * from './commentFormPage/CommentFormPage';
+export * from './commentsPage/CommentsPage';
+export * from './ratingFormPage/RatingFormPage';
+export * from './activateUserPage/ActivateUserPage';
 
 

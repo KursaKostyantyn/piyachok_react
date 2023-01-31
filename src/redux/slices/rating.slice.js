@@ -31,6 +31,43 @@ const findRatingsByUserLogin = createAsyncThunk(
     }
 );
 
+const saveRating = createAsyncThunk(
+    'ratingSlice/saveRating',
+    async ({rating},{rejectWithValue})=>{
+        try {
+            const {data} = await ratingService.saveRating(rating);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+
+const updateRating = createAsyncThunk(
+    'ratingSlice/updateRating',
+    async ({rating},{rejectWithValue})=>{
+        try {
+            const {data} = await ratingService.updateRating(rating);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const findRatingByPLaceIdAndUserLogin = createAsyncThunk(
+    'ratingSlice/findRatingByPLaceIdAndUserLogin',
+    async ({placeId,userLogin},{rejectWithValue})=>{
+        try {
+            const {data} = await ratingService.findRatingByPLaceIdAndUserLogin(placeId,userLogin);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 const ratingSlice = createSlice({
     name: 'ratingSlice',
     initialState,
@@ -41,6 +78,27 @@ const ratingSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(findRatingByPLaceIdAndUserLogin.fulfilled,(state, action) => {
+                state.errors=null;
+                state.currentRating=action.payload;
+            })
+            .addCase(findRatingByPLaceIdAndUserLogin.rejected,(state, action) => {
+                state.errors=null;
+            })
+            .addCase(updateRating.fulfilled,(state, action) => {
+                state.erros=null;
+                state.currentRating=action.payload;
+            })
+            .addCase(updateRating.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
+            .addCase(saveRating.fulfilled,(state, action) => {
+                state.errors=null;
+                state.currentRating=action.payload;
+            })
+            .addCase(saveRating.rejected, (state, action) => {
+                state.errors=action.payload;
+            })
             .addCase(findAllRatings.fulfilled, (state, action) => {
                 state.errors = null;
                 state.ratings = action.payload;
@@ -65,7 +123,10 @@ const {reducer: ratingReducer, actions:{setCurrentRating}} = ratingSlice;
 const ratingActions = {
     findAllRatings,
     findRatingsByUserLogin,
-    setCurrentRating
+    setCurrentRating,
+    saveRating,
+    updateRating,
+    findRatingByPLaceIdAndUserLogin
 }
 
 export {

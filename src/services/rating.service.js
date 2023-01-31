@@ -4,6 +4,9 @@ import {urls} from "../constants/urls";
 const ratingService = {
     findAllRatings: () => axiosService.get(urls.myRatings),
     findRatingsByUserLogin: (login) => axiosService.get(`${urls.myRatings}?login=${login}`),
+    saveRating:(rating)=>axiosService.post(`${urls.ratings}`,rating),
+    updateRating:(rating)=>axiosService.put(`${urls.ratings}`,rating),
+    findRatingByPLaceIdAndUserLogin:(placeId,userLogin)=>axiosService.get(`${urls.ratings}/rating`,{params:{placeId,userLogin}})
 
 
 }

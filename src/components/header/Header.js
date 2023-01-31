@@ -12,6 +12,8 @@ const Header = () => {
     const dispatch = useDispatch();
     const [isAuth, setIsAuth] = useState(false);
     const [isCabinet, setIsCabinet] = useState(false);
+    const [isLogin, setIsLogin] = useState(false);
+    const [isRegister, setIsRegister] = useState(false);
 
     const location = useLocation();
 
@@ -21,6 +23,19 @@ const Header = () => {
             setIsCabinet(true);
         } else {
             setIsCabinet(false)
+        }
+    }, [location])
+
+    useEffect(() => {
+        if (location.pathname.includes('login')) {
+            setIsLogin(true)
+        } else {
+            setIsLogin(false)
+        }
+        if (location.pathname.includes('register')) {
+            setIsRegister(true)
+        } else {
+            setIsRegister(false)
         }
     }, [location])
 
@@ -50,6 +65,10 @@ const Header = () => {
         navigate('/myCabinet')
     }
 
+    const goToMainPage=()=>{
+        navigate('/')
+    }
+
     return (
         <div className={css.Header}>
             <div className={css.HeaderName}>Пиячок</div>
@@ -62,8 +81,10 @@ const Header = () => {
 
                     :
                     <div>
-                        <button className={css.Buttons} onClick={login}>Авторизуватися</button>
-                        <button className={css.Buttons} onClick={register}>Зареєструватися</button>
+                        {isLogin ? <button onClick={goToMainPage}>Головна сторінка</button> :
+                            <button className={css.Buttons} onClick={login}>Авторизуватися</button>}
+                        {isRegister ? <button onClick={goToMainPage}>Головна сторінка</button> :
+                            <button className={css.Buttons} onClick={register}>Зареєструватися</button>}
                     </div>
                 }
             </div>

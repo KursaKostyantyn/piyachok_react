@@ -19,7 +19,13 @@ import {
     RatingFullInformationPage,
     RegisterFormPage,
     UsersPage,
-    UserProfilePage, UserFullInformationPage, OneNewsFullInformationPage, PlaceFormPage, NewsFormPage
+    UserProfilePage,
+    UserFullInformationPage,
+    OneNewsFullInformationPage,
+    PlaceFormPage,
+    NewsFormPage,
+    CommentFormPage,
+    CommentsPage, ActivateUserPage
 } from "./pages";
 import {authActions} from "./redux";
 import {FavoritePlaces, OneNewsFullInformation} from "./components";
@@ -40,13 +46,16 @@ const App = () => {
                     <Route index element={<Navigate to={'/main/places'}/>}/>
                     <Route path={'login'} element={<LoginFormPage/>}/>
                     <Route path={'register'} element={<RegisterFormPage/>}/>
+                    <Route path={'activate'} element={<ActivateUserPage/>}/>
                 </Route>
 
                 <Route path={'/main'} element={<MainLayout/>}>
                     <Route path={'places'}>
                         <Route path={''} element={<PlacesPage/>}/>
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
-                            <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'news'} element={<PlaceNewsPage/>}/>
+                            <Route path={'comments'} element={<CommentsPage/>}/>
+                            <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
                             <Route path={'news/:newsId'} element={<OneNewsFullInformation/>}/>
                         </Route>
                     </Route>
@@ -83,13 +92,13 @@ const App = () => {
 
                     <Route path={'myPlaces'}>
                         <Route path={':placeId/update'} element={<PlaceFormPage/>}/>
-
-                        //todo delete
-                        {/*<Route path={'update'} element={<PlaceFormPage/>}/>*/}
                         <Route path={''} element={<MyPlacesPage/>}/>
 
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
                             <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'news'} element={<PlaceNewsPage/>}/>
+                            <Route path={'comments'} element={<CommentsPage/>}/>
+                            <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
                             <Route path={'addNews'} element={<NewsFormPage/>}/>
                             <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                         </Route>
@@ -97,12 +106,19 @@ const App = () => {
 
                     <Route path={'favoritePlaces'}>
                         <Route path={''} element={<FavoritePlaces/>}/>
-                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}/>
+                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
+                            <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'news'} element={<PlaceNewsPage/>}/>
+                            <Route path={'comments'} element={<CommentsPage/>}/>
+                            <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
+                        </Route>
                     </Route>
 
                     <Route path={'myComments'}>
                         <Route path={''} element={<MyCommentsPage/>}/>
                         <Route path={':myCommentsId'} element={<CommentFullInformationPage/>}/>
+                        <Route path={':myCommentsId/updateComment'} element={<CommentFormPage/>}/>
                     </Route>
 
                     <Route path={'myRatings'}>

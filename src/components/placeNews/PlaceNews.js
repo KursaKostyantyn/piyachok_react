@@ -1,6 +1,6 @@
 import {useSelector} from "react-redux";
 import {OneNews} from "../oneNews/OneNews";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 
 const PlaceNews = () => {
@@ -8,12 +8,18 @@ const PlaceNews = () => {
     const [newFirst, setNewFirst] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
-
+    const [canEdit, setCanEdit] = useState(false);
 
     const newNews = () => {
         setNewFirst(!newFirst)
     }
 
+    useEffect(() => {
+        if (location.pathname.includes('myCabinet') && !location.pathname.includes('favoritePlaces')) {
+            setCanEdit(true)
+        } else
+            setCanEdit(false)
+    }, [])
 
     const goToAddNews = () => {
         navigate('addNews')
@@ -22,7 +28,7 @@ const PlaceNews = () => {
     return (
         <div>
             <div>
-                {location.pathname.includes('myCabinet') && <button onClick={goToAddNews}>Додати новину</button>}
+                {canEdit && <button onClick={goToAddNews}>Додати новину</button>}
             </div>
             {!newFirst ? <button onClick={newNews}>Спочатку нові новини</button> :
                 <button onClick={newNews}>Спочатку старі новини</button>}
@@ -33,11 +39,7 @@ const PlaceNews = () => {
                 <div> {currentPlace && currentPlace.news.slice(0).reverse().map(oneNews => <OneNews key={oneNews.id}
                                                                                                     oneNews={oneNews}
                                                                                                     details={true}/>)}</div>
-
-
             }
-
-
         </div>
     );
 };

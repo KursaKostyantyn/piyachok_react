@@ -60,7 +60,7 @@ const CabinetMenu = () => {
     return (
         <div>
             CabinetMenu
-            <button className={css.CabinetMenuButtons} onClick={mainMenu}>Головне меню</button>
+            <button className={css.CabinetMenuButtons} onClick={mainMenu}>Головна сторінка</button>
             <button className={css.CabinetMenuButtons} onClick={userProfile}>Мій профіль</button>
             <button className={css.CabinetMenuButtons} onClick={myPlaces}>Мої заклади</button>
             <button className={css.CabinetMenuButtons} onClick={myNews}>Мої новини</button>

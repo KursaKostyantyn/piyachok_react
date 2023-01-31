@@ -15,7 +15,7 @@ const MyComments = () => {
             dispatch(commentsActions.findCommentsByUserLogin({login: authorizedUser.login}));
         }
 
-    }, [dispatch])
+    }, [authorizedUser])
 
 
     return (
