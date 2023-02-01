@@ -28,6 +28,7 @@ const login = createAsyncThunk(
             const {data} = await authService.login(user);
             return data;
         } catch (e) {
+            console.log(e)
             return rejectWithValue(e.response.data)
         }
     }

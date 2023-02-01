@@ -10,8 +10,9 @@ const userService = {
     checkPlaceIsFavoriteByPlaceIdAndUserLogin: (placeId, login) => axiosService.get(`${urls.users}/favoritePlaces/check?placeId=${placeId}&login=${login}`),
     addPlaceToFavoriteByPlaceIdAndUserLogin: (placeId, login) => axiosService.put(`${urls.users}/favoritePlaces/add?placeId=${placeId}&login=${login}`),
     deletePlaceFromFavoriteByPlaceIdUserLogin: (placeId, login) => axiosService.delete(`${urls.users}/favoritePlaces/delete?placeId=${placeId}&login=${login}`),
-    activateUserById: (userId) => axiosService.get(`${urls.activate}`, {params: {userId}})
-
+    activateUserById: (userId) => axiosService.get(`${urls.activate}`, {params: {userId}}),
+    sendResetPasswordToken: (userLogin) => axiosService.get(`${urls.users}/sendResetPasswordToken`, {params: {userLogin}}),
+    resetPasswordAndSetNew:(userLogin,resetPasswordToken,password)=>axiosService.get(`${urls.users}/resetPassword`,{params:{userLogin,resetPasswordToken,password}})
 
 }
 

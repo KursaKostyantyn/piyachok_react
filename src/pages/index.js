@@ -27,5 +27,7 @@ export * from './commentFormPage/CommentFormPage';
 export * from './commentsPage/CommentsPage';
 export * from './ratingFormPage/RatingFormPage';
 export * from './activateUserPage/ActivateUserPage';
+export * from './sendResetPasswordTokenFormPage/SendResetPasswordTokenFormPage';
+export * from './resetPasswordFormPage/ResetPasswordFormPage';
 
 

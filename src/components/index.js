@@ -32,3 +32,4 @@ export * from './comments/comments';
 export * from './placeRating/PlaceRating';
 export * from './ratingForm/RatingForm';
 export * from './activateUser/ActivateUser';
+export * from './sendResetPasswordTokenForm/SendResetPasswordTokenForm'

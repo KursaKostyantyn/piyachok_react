@@ -124,6 +124,30 @@ const activateUserById = createAsyncThunk(
     }
 );
 
+const sendResetPasswordToken = createAsyncThunk(
+    'userSlice/sendResetPasswordToken',
+    async ({userLogin},{rejectWithValue})=>{
+        try {
+            const {data} = await userService.sendResetPasswordToken(userLogin);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const resetPasswordAndSetNew = createAsyncThunk(
+    'userSlice/resetPasswordAndSetNew',
+    async ({userLogin,resetPasswordToken,password},{rejectedWithValue})=>{
+        try {
+            const {data} = await userService.resetPasswordAndSetNew(userLogin,resetPasswordToken,password);
+            return data;
+        } catch (e) {
+            return rejectedWithValue(e.response.data)
+        }
+    }
+);
+
 
 const userSlice = createSlice({
     name: 'userSlice',
@@ -138,6 +162,19 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(resetPasswordAndSetNew.fulfilled,(state, action) => {
+                state.errors=null;
+                state.currentUser=action.payload;
+            })
+            .addCase(resetPasswordAndSetNew.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
+            .addCase(sendResetPasswordToken.fulfilled,(state, action) => {
+                state.errors=null;
+            })
+            .addCase(sendResetPasswordToken.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
             .addCase(activateUserById.fulfilled,(state, action) => {
                 state.errors=null;
             })
@@ -222,7 +259,9 @@ const userActions = {
     addPlaceToFavoriteByPlaceIdAndUserLogin,
     setIsFavorite,
     deletePlaceFromFavoriteByPlaceIdUserLogin,
-    activateUserById
+    activateUserById,
+    sendResetPasswordToken,
+    resetPasswordAndSetNew
 
 }
 

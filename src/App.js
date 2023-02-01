@@ -25,7 +25,8 @@ import {
     PlaceFormPage,
     NewsFormPage,
     CommentFormPage,
-    CommentsPage, ActivateUserPage
+    CommentsPage, ActivateUserPage,
+    SendResetPasswordTokenFormPage, ResetPasswordFormPage
 } from "./pages";
 import {authActions} from "./redux";
 import {FavoritePlaces, OneNewsFullInformation} from "./components";
@@ -47,6 +48,8 @@ const App = () => {
                     <Route path={'login'} element={<LoginFormPage/>}/>
                     <Route path={'register'} element={<RegisterFormPage/>}/>
                     <Route path={'activate'} element={<ActivateUserPage/>}/>
+                    <Route path={'sendResetPasswordToken'} element={<SendResetPasswordTokenFormPage/>}/>
+                    <Route path={'resetPassword'} element={<ResetPasswordFormPage/>}/>
                 </Route>
 
                 <Route path={'/main'} element={<MainLayout/>}>
