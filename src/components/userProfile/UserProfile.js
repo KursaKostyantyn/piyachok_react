@@ -52,7 +52,7 @@ const UserProfile = () => {
         <div>
             <form className={css.FormWrap}>
                 <div>
-                    <input type={'text'} placeholder={'login'} {...register('login')}/> Логін
+                    <input type={'text'} disabled={true} placeholder={'login'} {...register('login')}/> Логін
                 </div>
                 <div>
                     <input type={'password'} autoComplete={'new-password'}  placeholder={'password'} {...register('password')}/> Пароль
@@ -77,7 +77,7 @@ const UserProfile = () => {
                     </select>
                 </div>
                 <div>
-                    <input type={'text'} placeholder={'creationDate'} {...register('creationDate')}/> creationDate:
+                    <input type={'text'} disabled={true} placeholder={'creationDate'} {...register('creationDate')}/> creationDate:
                 </div>
                 <div>
                     <button onClick={handleSubmit(update)}>Оновити профіль</button>

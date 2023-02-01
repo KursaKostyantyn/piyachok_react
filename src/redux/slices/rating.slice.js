@@ -68,6 +68,19 @@ const findRatingByPLaceIdAndUserLogin = createAsyncThunk(
     }
 );
 
+const findRatingById = createAsyncThunk(
+    'ratingSlice/findRatingById',
+    async ({myRatingsId}, {rejectedWithValue})=>{
+        try {
+            const {data} = await ratingService.findRatingById(myRatingsId);
+            return data;
+        } catch (e) {
+            return rejectedWithValue(e.response.data)
+        }
+    }
+);
+
+
 const ratingSlice = createSlice({
     name: 'ratingSlice',
     initialState,
@@ -78,6 +91,13 @@ const ratingSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(findRatingById.fulfilled,(state, action) => {
+                state.errors=null;
+                state.currentRating=action.payload;
+            })
+            .addCase(findRatingById.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
             .addCase(findRatingByPLaceIdAndUserLogin.fulfilled,(state, action) => {
                 state.errors=null;
                 state.currentRating=action.payload;
@@ -126,7 +146,8 @@ const ratingActions = {
     setCurrentRating,
     saveRating,
     updateRating,
-    findRatingByPLaceIdAndUserLogin
+    findRatingByPLaceIdAndUserLogin,
+    findRatingById
 }
 
 export {

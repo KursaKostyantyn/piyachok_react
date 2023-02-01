@@ -6,7 +6,8 @@ const ratingService = {
     findRatingsByUserLogin: (login) => axiosService.get(`${urls.myRatings}?login=${login}`),
     saveRating:(rating)=>axiosService.post(`${urls.ratings}`,rating),
     updateRating:(rating)=>axiosService.put(`${urls.ratings}`,rating),
-    findRatingByPLaceIdAndUserLogin:(placeId,userLogin)=>axiosService.get(`${urls.ratings}/rating`,{params:{placeId,userLogin}})
+    findRatingByPLaceIdAndUserLogin:(placeId,userLogin)=>axiosService.get(`${urls.ratings}/rating`,{params:{placeId,userLogin}}),
+    findRatingById:(myRatingsId)=>axiosService.get(`${urls.ratings}/${myRatingsId}`),
 
 
 }

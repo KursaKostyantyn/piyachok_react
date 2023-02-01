@@ -14,7 +14,7 @@ const MyRatings = () => {
             dispatch(ratingActions.findRatingsByUserLogin({login: authorizedUser.login}))
         }
 
-    }, [dispatch])
+    }, [authorizedUser])
 
     return (
         <div>

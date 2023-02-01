@@ -7,7 +7,6 @@ const RatingShortInformation = ({rating}) => {
     const dispatch = useDispatch();
 
     const currentRating=()=>{
-        dispatch(ratingActions.setCurrentRating(rating))
         navigate(`${rating.id}`)
     }
 
@@ -15,7 +14,7 @@ const RatingShortInformation = ({rating}) => {
         <div>
 
             <div>Id: {rating.id}</div>
-            <div>Назва закладу: {rating.place.name}</div>
+            <div>Назва закладу: {rating.placeName}</div>
             <div>Оцінка: {rating.rating}</div>
             <button onClick={currentRating}>Деталі</button>
             <hr/>
