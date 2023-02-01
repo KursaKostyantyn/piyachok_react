@@ -5,7 +5,6 @@ import {ratingActions} from "../../redux";
 
 const RatingFullInformation = () => {
     const {currentRating} = useSelector(state => state.ratings);
-    const {authorizedUser} = useSelector(state => state.auth);
 
     const dispatch = useDispatch();
     const {myRatingsId} = useParams();
