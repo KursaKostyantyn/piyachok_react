@@ -1,10 +1,10 @@
-import {MyPlaces} from "../../components/myPlaces/MyPlaces";
+import {Places} from "../../components/index";
 
 
 const MyPlacesPage = () => {
     return (
         <div>
-            <MyPlaces/>
+            <Places/>
         </div>
     );
 };

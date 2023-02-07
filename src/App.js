@@ -4,32 +4,33 @@ import {useEffect} from "react";
 
 import {LoggedLayout, LoginLayout, MainLayout} from "./layouts";
 import {
+    ActivateUserPage,
     AllNewsPage,
+    CommentFormPage,
     CommentFullInformationPage,
+    CommentsPage, FavoritePlacesPage,
     LoginFormPage,
     MainNewsPage,
-    MyCommentsPage,
     MyNewsPage,
     MyPlacesPage,
     MyRatingPage,
+    NewsFormPage,
     NotfoundPage,
+    OneNewsFullInformationPage,
+    PlaceCommentsPage,
+    PlaceFormPage,
     PlaceFullInformationPage,
     PlaceNewsPage,
     PlacesPage,
     RatingFullInformationPage,
     RegisterFormPage,
-    UsersPage,
-    UserProfilePage,
+    ResetPasswordFormPage,
+    SendResetPasswordTokenFormPage, UserFormPage,
     UserFullInformationPage,
-    OneNewsFullInformationPage,
-    PlaceFormPage,
-    NewsFormPage,
-    CommentFormPage,
-    CommentsPage, ActivateUserPage,
-    SendResetPasswordTokenFormPage, ResetPasswordFormPage
+    UserProfilePage,
+    UsersPage
 } from "./pages";
 import {authActions} from "./redux";
-import {FavoritePlaces, OneNewsFullInformation} from "./components";
 
 
 const App = () => {
@@ -57,28 +58,35 @@ const App = () => {
                         <Route path={''} element={<PlacesPage/>}/>
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
                             <Route path={'news'} element={<PlaceNewsPage/>}/>
-                            <Route path={'comments'} element={<CommentsPage/>}/>
-                            <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
-                            <Route path={'news/:newsId'} element={<OneNewsFullInformation/>}/>
+                            <Route path={'comments'}>
+                                <Route path={''} element={<PlaceCommentsPage/>}/>
+                                <Route path={':commentId'} element={<CommentFullInformationPage/>}/>
+                                <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
+                            </Route>
+
+
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                         </Route>
                     </Route>
                     <Route path={'news'}>
                         <Route index element={<Navigate to={'mainNews'}/>}/>
                         <Route path={'mainNews'}>
                             <Route path={''} element={<MainNewsPage/>}/>
-                            <Route path={'news/:newsId'} element={<OneNewsFullInformation/>}/>
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                         </Route>
                         <Route path={'allNews'}>
                             <Route path={''} element={<AllNewsPage/>}/>
-                            <Route path={'news/:newsId'} element={<OneNewsFullInformation/>}/>
+                            <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                         </Route>
 
                     </Route>
                 </Route>
                 <Route path={'/myCabinet'} element={<LoggedLayout/>}>
                     <Route index element={<Navigate to={'profile'}/>}/>
+
                     <Route path={'profile'}>
                         <Route path={':userId'} element={<UserFullInformationPage/>}/>
+                        <Route path={':userId/update'} element={<UserFormPage/>}/>
                         <Route path={''} element={<UserProfilePage/>}/>
                     </Route>
 
@@ -88,7 +96,7 @@ const App = () => {
                         <Route path={''} element={<MyNewsPage/>}/>
                         <Route path={'news/:newsId'}>
                             <Route path={'update'} element={<NewsFormPage/>}/>
-                            <Route path={''} element={<OneNewsFullInformation/>}/>
+                            <Route path={''} element={<OneNewsFullInformationPage/>}/>
                         </Route>
 
                     </Route>
@@ -99,29 +107,41 @@ const App = () => {
 
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
                             <Route path={''} element={<PlaceNewsPage/>}/>
-                            <Route path={'news'} element={<PlaceNewsPage/>}/>
-                            <Route path={'comments'} element={<CommentsPage/>}/>
-                            <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
-                            <Route path={'addNews'} element={<NewsFormPage/>}/>
-                            <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
+                            <Route path={'news'}>
+                                <Route path={''} element={<PlaceNewsPage/>}/>
+                                <Route path={'news/:newsId'}>
+                                    <Route path={'update'} element={<NewsFormPage/>}/>
+                                    <Route path={''} element={<OneNewsFullInformationPage/>}/>
+                                </Route>
+                            </Route>
+                            <Route path={'comments'}>
+                                <Route path={''} element={<PlaceCommentsPage/>}/>
+                                <Route path={'addComment'} element={<CommentFormPage/>}/>
+                                <Route path={':commentId'}>
+                                    <Route path={''} element={<CommentFullInformationPage/>}/>
+                                    <Route path={'updateComment'} element={<CommentFormPage/>}/>
+                                </Route>
+                            </Route>
+                            <Route path={'news/addNews'} element={<NewsFormPage/>}/>
                         </Route>
+
                     </Route>
 
                     <Route path={'favoritePlaces'}>
-                        <Route path={''} element={<FavoritePlaces/>}/>
+                        <Route path={''} element={<FavoritePlacesPage/>}/>
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
                             <Route path={''} element={<PlaceNewsPage/>}/>
                             <Route path={'news'} element={<PlaceNewsPage/>}/>
-                            <Route path={'comments'} element={<CommentsPage/>}/>
+                            <Route path={'comments'} element={<PlaceCommentsPage/>}/>
                             <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
                             <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                         </Route>
                     </Route>
 
                     <Route path={'myComments'}>
-                        <Route path={''} element={<MyCommentsPage/>}/>
-                        <Route path={':myCommentsId'} element={<CommentFullInformationPage/>}/>
-                        <Route path={':myCommentsId/updateComment'} element={<CommentFormPage/>}/>
+                        <Route path={''} element={<CommentsPage/>}/>
+                        <Route path={':commentId'} element={<CommentFullInformationPage/>}/>
+                        <Route path={':commentId/updateComment'} element={<CommentFormPage/>}/>
                     </Route>
 
                     <Route path={'myRatings'}>
@@ -131,18 +151,66 @@ const App = () => {
 
                     <Route path={'allUsers'}>
                         <Route path={''} element={<UsersPage/>}/>
-                        <Route path={':userId'} element={<UserProfilePage/>}/>
+                        <Route path={':userId/update'} element={<UserFormPage/>}/>
+                        <Route path={':userId'} element={<UserFullInformationPage/>}/>
                     </Route>
 
+                    <Route path={'allComments'}>
+                        <Route path={''} element={<CommentsPage/>}/>
+                        <Route path={':commentId/updateComment'} element={<CommentFormPage/>}/>
+                        <Route path={':commentId'} element={<CommentFullInformationPage/>}/>
+                    </Route>
 
-                    <Route path={'users'} element={<UsersPage/>}/>
+                    <Route path={'allPlaces'}>
+                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
+                            <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'news'}>
+                                <Route path={''} element={<PlaceNewsPage/>}/>
+                                <Route path={'news/:newsId'}>
+                                    <Route path={'update'} element={<NewsFormPage/>}/>
+                                    <Route path={''} element={<OneNewsFullInformationPage/>}/>
+                                </Route>
+                            </Route>
+                            <Route path={'comments'}>
+                                <Route path={''} element={<PlaceCommentsPage/>}/>
+                                <Route path={'addComment'} element={<CommentFormPage/>}/>
+                                <Route path={':commentId'}>
+                                    <Route path={''} element={<CommentFullInformationPage/>}/>
+                                    <Route path={'updateComment'} element={<CommentFormPage/>}/>
+                                </Route>
+                            </Route>
+                            <Route path={'news/addNews'} element={<NewsFormPage/>}/>
+                        </Route>
+                        <Route path={''} element={<PlacesPage/>}/>
+                    </Route>
+
+                    <Route path={'news'}>
+                        <Route index element={<Navigate to={'mainNews'}/>}/>
+                        <Route path={'mainNews'}>
+                            <Route path={''} element={<MainNewsPage/>}/>
+                            <Route path={'news/:newsId'}>
+                                <Route path={'update'} element={<NewsFormPage/>}/>
+                                <Route path={''} element={<OneNewsFullInformationPage/>}/>
+                            </Route>
+                        </Route>
+                        <Route path={'allNews'}>
+                            <Route path={''} element={<AllNewsPage/>}/>
+                            <Route path={'news/:newsId'}>
+                                <Route path={'update'} element={<NewsFormPage/>}/>
+                                <Route path={''} element={<OneNewsFullInformationPage/>}/>
+                            </Route>
+                        </Route>
+                    </Route>
                 </Route>
 
                 <Route path={'*'} element={<NotfoundPage/>}/>
             </Routes>
         </div>
-    )
-        ;
+    );
 };
 
-export {App};
+export
+{
+    App
+}
+    ;

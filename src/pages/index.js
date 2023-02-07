@@ -13,7 +13,6 @@ export * from './myPlacesPage/MyPlacesPage';
 export * from './myNewsPage/MyNewsPage';
 export * from './myNewsPage/MyNewsPage';
 export * from './favoritePlacesPage/FavoritePlacesPage';
-export * from './myCommentsPage/MyCommentsPage';
 export * from './commentFullInformationPage/CommentFullInformationPage';
 export * from './myRatingsPage/MyRatingPage';
 export * from './ratingFullInformationPage/RatingFullInformationPage';
@@ -24,10 +23,11 @@ export * from './oneNewsFullInformationPage/OneNewsFullInformationPage';
 export * from './placeFormPage/PlaceFormPage';
 export * from './newsFormPage/NewsFormPage';
 export * from './commentFormPage/CommentFormPage';
-export * from './commentsPage/CommentsPage';
+export * from './placeCommentsPage/PlaceCommentsPage';
 export * from './ratingFormPage/RatingFormPage';
 export * from './activateUserPage/ActivateUserPage';
 export * from './sendResetPasswordTokenFormPage/SendResetPasswordTokenFormPage';
 export * from './resetPasswordFormPage/ResetPasswordFormPage';
-
+export * from './commentsPage/CommentsPage';
+export * from './userFormPage/UserFormPage'
 

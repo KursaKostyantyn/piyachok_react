@@ -1,17 +1,11 @@
 import {useNavigate} from "react-router-dom";
-import {useDispatch} from "react-redux";
 
-import {userActions} from "../../redux";
-
-const User = ({user}) => {
+const UserShortInformation = ({user}) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
-
-    const {id, login, firstName, lastName, birthDate, email, role, creationDate, isActivated, isBlocked, places} = user;
+    const {id, login, firstName, lastName, role} = user;
 
     const currentUser = () => {
-        dispatch(userActions.setCurrentUser(user));
         navigate(`${id}`)
     }
     return (
@@ -25,4 +19,4 @@ const User = ({user}) => {
     );
 };
 
-export {User};
+export {UserShortInformation};

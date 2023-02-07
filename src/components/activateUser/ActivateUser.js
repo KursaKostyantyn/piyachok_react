@@ -1,20 +1,17 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {userActions} from "../../redux";
 import {useSearchParams} from "react-router-dom";
+
+import {userActions} from "../../redux";
 
 const ActivateUser = () => {
     const {errors} = useSelector(state => state.users);
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
 
-useEffect(()=>{
-    console.log(errors)
-},[errors])
 
     useEffect(() => {
-        dispatch(userActions.activateUserById({userId: searchParams.get('userId')}))
-        console.log('this dispatch')
+        dispatch(userActions.activateUser({activateToken: searchParams.get('activateToken')}))
     }, [dispatch])
 
     return (

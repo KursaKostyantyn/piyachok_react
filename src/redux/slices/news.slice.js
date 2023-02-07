@@ -9,7 +9,8 @@ const initialState = {
     previousPage: 0,
     nextPage: 0,
     amountOfPages: 0,
-    currentPage: 1
+    currentPage: 1,
+    amountOfItems:0
 
 }
 
@@ -54,7 +55,6 @@ const findNewsByUserId = createAsyncThunk(
     async ({old, page, userId}, {rejectWithValue}) => {
         try {
             const {data} = await newsService.findNewsByUserId(old, page, userId);
-            console.log(data)
             return data
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -136,8 +136,7 @@ const newsSlice = createSlice({
                 state.nextPage = action.payload.nextPage
                 state.amountOfPages = action.payload.amountOfPages
                 state.currentPage = action.payload.currentPage
-                console.log(state.news)
-                console.log(action.payload.items)
+                state.amountOfItems=action.payload.amountOfItems
             })
             .addCase(findNewsByUserId.rejected, (state, action) => {
                 state.errors = action.payload;
@@ -149,6 +148,7 @@ const newsSlice = createSlice({
                 state.nextPage = action.payload.nextPage
                 state.amountOfPages = action.payload.amountOfPages
                 state.currentPage = action.payload.currentPage
+                state.amountOfItems=action.payload.amountOfItems
             })
             .addCase(findAllNews.rejected, (state, action) => {
                 state.erros = action.payload
@@ -167,6 +167,7 @@ const newsSlice = createSlice({
                 state.nextPage = action.payload.nextPage
                 state.amountOfPages = action.payload.amountOfPages
                 state.currentPage = action.payload.currentPage
+                state.amountOfItems=action.payload.amountOfItems
             })
             .addCase(findMainNews.rejected, (state, action) => {
                 state.erros = action.payload;

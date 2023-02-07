@@ -1,25 +1,25 @@
 import {useForm} from "react-hook-form";
 import {useEffect} from "react";
 
-import css from './UserProfile.module.css'
+import css from './UserForm.module.css'
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate, useParams} from "react-router-dom";
 import {userActions} from "../../redux";
 import {authService} from "../../services";
 
-const UserProfile = () => {
+const UserForm = () => {
     const {currentUser} = useSelector(state => state.users);
     const dispatch = useDispatch();
     const params = useParams();
-    const {reset, setValue, handleSubmit, register} = useForm();
+    const {setValue, handleSubmit, register} = useForm();
     const navigate = useNavigate();
 
     // const {login, firstName, lastName, birthDate, email, role, creationDate, isActivated, isBlocked, places} = currentUser;
 
 
     useEffect(() => {
-        dispatch(userActions.findUserById({id: params.userId}))
-    }, [dispatch])
+        dispatch(userActions.findUserById({userId: params.userId}))
+    }, [dispatch,params.userId])
 
     useEffect(() => {
 
@@ -31,17 +31,18 @@ const UserProfile = () => {
             setValue('email', currentUser.email)
             setValue('role', currentUser.role)
             setValue('creationDate', currentUser.creationDate)
+            setValue('activated', currentUser.activated)
         }
 
     }, [currentUser])
 
-    const update = (data) => {
+    const update = async (data) => {
         console.log(data);
-        dispatch(userActions.updateUserById({id: currentUser.id, user: data}))
+        await dispatch(userActions.updateUserById({id: currentUser.id, user: data}))
     }
 
-    const deleteUser=()=>{
-        dispatch(userActions.deleteUserById({id:currentUser.id}))
+    const deleteUser = async () => {
+        await dispatch(userActions.deleteUserById({id: currentUser.id}))
         authService.deleteTokens();
         navigate('/login')
 
@@ -52,24 +53,32 @@ const UserProfile = () => {
         <div>
             <form className={css.FormWrap}>
                 <div>
-                    <input type={'text'} disabled={true} placeholder={'login'} {...register('login')}/> Логін
+                    <h4>Логін</h4>
+                    <input type={'text'} disabled={true} placeholder={'login'} {...register('login')}/>
                 </div>
                 <div>
-                    <input type={'password'} autoComplete={'new-password'}  placeholder={'password'} {...register('password')}/> Пароль
+                    <h4>Пароль</h4>
+                    <input type={'password'} autoComplete={'new-password'}
+                           placeholder={'password'} {...register('password')}/>
                 </div>
                 <div>
-                    <input type={'text'} placeholder={'firstName'} {...register('firstName')}/> Ім'я
+                    <h4>Ім'я</h4>
+                    <input type={'text'} placeholder={'firstName'} {...register('firstName')}/>
                 </div>
                 <div>
-                    <input type={'text'} placeholder={'lastName'} {...register('lastName')}/> Прізвище
+                    <h4>Прізвище</h4>
+                    <input type={'text'} placeholder={'lastName'} {...register('lastName')}/>
                 </div>
                 <div>
-                    <input type={'date'} placeholder={'birthDate'} {...register('birthDate')}/> дата народження
+                    <h4>Дата народження</h4>
+                    <input type={'date'} placeholder={'birthDate'} {...register('birthDate')}/>
                 </div>
                 <div>
-                    <input type={'text'} placeholder={'email'} {...register('email')}/> пошта
+                    <h4>Пошта</h4>
+                    <input type={'text'} placeholder={'email'} {...register('email')}/>
                 </div>
                 <div>
+                    <h4>Роль</h4>
                     <select name={'role'} {...register('role')}>
                         <option value='ROLE_SUPERADMIN'>SUPERADMIN</option>
                         <option value='ROLE_ADMIN'>ADMIN</option>
@@ -77,7 +86,12 @@ const UserProfile = () => {
                     </select>
                 </div>
                 <div>
-                    <input type={'text'} disabled={true} placeholder={'creationDate'} {...register('creationDate')}/> creationDate:
+                    <h4>Дата реєстрації</h4>
+                    <input type={'text'} disabled={true} placeholder={'creationDate'} {...register('creationDate')}/>
+                </div>
+                <div>
+                    <h4>Активовано</h4>
+                    <input type={'checkbox'} disabled={true} placeholder={'isActivated'} {...register('activated')}/>
                 </div>
                 <div>
                     <button onClick={handleSubmit(update)}>Оновити профіль</button>
@@ -93,4 +107,4 @@ const UserProfile = () => {
     );
 };
 
-export {UserProfile};
+export {UserForm};

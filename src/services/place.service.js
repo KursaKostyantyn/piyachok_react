@@ -6,7 +6,8 @@ const placeService={
     savePlace:(place,userId)=>axiosService.post(`${urls.places}?userId=${userId}`,place),
     deletePlaceById:(id)=>axiosService.delete(`${urls.places}/${id}`),
     findPlaceById:(id)=>axiosService.get(`${urls.places}/${id}`),
-    updatePlaceById:(id,place)=>axiosService.put(`${urls.places}/${id}`,place)
+    updatePlaceById:(id,place)=>axiosService.put(`${urls.places}/${id}`,place),
+    findPlaceByUserLogin:(userLogin, page=1)=>axiosService.get(`${urls.places}/myPlaces`,{params: {userLogin, page}})
 }
 
 export {

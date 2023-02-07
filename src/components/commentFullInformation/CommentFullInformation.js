@@ -6,6 +6,7 @@ import {commentsActions} from "../../redux";
 
 const CommentFullInformation = () => {
     const {currentComment} = useSelector(state => state.comments);
+    const {authorizedUser} = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const params = useParams();
     const location = useLocation();
@@ -13,16 +14,17 @@ const CommentFullInformation = () => {
     const navigate = useNavigate();
 
     useEffect(()=>{
-        if (location.pathname.includes('myComments')){
+        if (location.pathname.includes('myComments') ||
+            (location.pathname.includes('allComments')&& authorizedUser.role.split('_')[1]==='SUPERADMIN' )){
             setCanEdit(true)
         } else {
             setCanEdit(false)
         }
-    },[])
+    },[location.pathname,authorizedUser])
 
     useEffect(() => {
-        dispatch(commentsActions.findCommentById({id:params.myCommentsId}))
-    }, [dispatch])
+        dispatch(commentsActions.findCommentById({commentId:params.commentId}))
+    }, [dispatch,params.commentId])
 
     const updateComment=()=>{
         navigate('updateComment')

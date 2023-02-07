@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
-import {useNavigate, useSearchParams} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 
 import {newsAction} from "../../redux";
 import {OneNews} from "../oneNews/OneNews"
@@ -11,9 +11,10 @@ const MainNews = () => {
     const [newUp, setNewUp] = useState(true);
     const navigate = useNavigate();
     const [query, setQuery] = useSearchParams({page: '1'});
+    const location = useLocation();
 
-    const goToMainNews = () => {
-        navigate("/main/news/allNews")
+    const goToAllNews = () => {
+        navigate(location.pathname.replace('mainNews', 'allNews'))
     }
 
     useEffect(() => {
@@ -39,8 +40,8 @@ const MainNews = () => {
     return (
         <div>
             <div>
-                <button onClick={goToMainNews}>Дивитись всі новини</button>
-                <button onClick={newest}>{!newUp ? <span>Спочатку нові новини</span> :
+                <button onClick={goToAllNews}>Дивитись всі новини</button>
+                <button onClick={newest}>{newUp ? <span>Спочатку нові новини</span> :
                     <span>Спочатку старі новини</span>}</button>
                 <br/>
                 <button disabled={previousPage === 0} onClick={goToPreviousPage}>Попередня сторінка</button>

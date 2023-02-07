@@ -10,51 +10,60 @@ const CabinetMenu = () => {
     const {authorizedUser} = useSelector(state => state.auth);
     const [isSuperAdmin, setIsSuperAdmin] = useState(false);
     const dispatch = useDispatch();
-    const {currentNews} = useSelector(state => state.news);
 
-    useEffect(()=>{
-        if (authorizedUser!==null && authorizedUser.role.split('_')[1]==='SUPERADMIN'){
+
+    useEffect(() => {
+        if (authorizedUser !== null && authorizedUser.role.split('_')[1] === 'SUPERADMIN') {
             setIsSuperAdmin(true);
         } else {
             setIsSuperAdmin(false)
         }
-    },[])
+    }, [authorizedUser])
 
-    const mainMenu =()=>{
+    const mainMenu = () => {
         navigate('/main/places')
     }
 
-    const userProfile =()=>{
+    const userProfile = () => {
         navigate('profile')
     }
 
-    const myPlaces =()=>{
+    const myPlaces = () => {
         navigate('myPlaces')
     }
 
-    const myNews=()=>{
-        console.log(currentNews)
+    const myNews = () => {
         dispatch(newsAction.setCurrentNews(null));
-        console.log(currentNews)
         navigate('myNews')
     }
 
-    const favoritePLaces=()=>{
+    const favoritePLaces = () => {
         navigate('favoritePlaces')
     }
 
-    const myComments=()=>{
+    const myComments = () => {
         navigate('myComments')
     }
 
-    const myRatings=()=>{
+    const myRatings = () => {
         navigate('myRatings')
     }
 
-    const allUsers=()=>{
+    const allUsers = () => {
         navigate('allUsers')
     }
 
+    const allPlaces = () => {
+        navigate('allPlaces')
+    }
+
+    const allComments = () => {
+        navigate('allComments')
+    }
+
+    const allNews = () => {
+        navigate('news')
+    }
 
 
     return (
@@ -68,7 +77,11 @@ const CabinetMenu = () => {
             <button className={css.CabinetMenuButtons} onClick={myComments}>Мої коментарі</button>
             <button className={css.CabinetMenuButtons} onClick={myRatings}>Мої оцінки</button>
 
+            {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allPlaces}>Всі заклади</button>}
             {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allUsers}>Всі користувачі</button>}
+            {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allComments}>Всі коментарі</button>}
+            {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allNews}>Всі новини</button>}
+
 
         </div>
     );

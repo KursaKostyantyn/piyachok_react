@@ -18,13 +18,19 @@ const Places = () => {
 
 
     useEffect(() => {
-        dispatch(placeActions.findAllPlaces({page: query.get('page')}));
-        if (location.pathname.includes('myCabinet')) {
+        if(authorizedUser && authorizedUser.role.split('_')[1]==='SUPERADMIN' && location.pathname.includes('myPlaces')){
+            dispatch(placeActions.findPlaceByUserLogin({userLogin:authorizedUser.login,page:query.get('page')}))
+        }
+        else {
+            dispatch(placeActions.findAllPlaces({page: query.get('page')}));
+        }
+
+            if (location.pathname.includes('myCabinet')) {
             setIsMyCabinet(true)
         } else {
             setIsMyCabinet(false)
         }
-    }, [query])
+    }, [query,authorizedUser])
 
 
     const goToPreviousPage = () => {

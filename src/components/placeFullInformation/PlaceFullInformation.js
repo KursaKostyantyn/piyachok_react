@@ -4,8 +4,6 @@ import {useDispatch, useSelector} from "react-redux";
 
 import {placeActions, userActions} from "../../redux";
 import css from "./PlaceFullInformation.module.css";
-import {MyRatings} from "../myRatings/MyRatings";
-import {PlaceRating} from "../placeRating/PlaceRating";
 import {RatingForm} from "../ratingForm/RatingForm";
 
 
@@ -21,22 +19,21 @@ const PlaceFullInformation = () => {
     const [canEdit, setCanEdit] = useState(false);
 
 
-
-
     useEffect(() => {
-        if (authorizedUser !== null
+        if (((authorizedUser !== null
             && currentPlace !== null
             && authorizedUser.id === currentPlace.userId
-            && !location.pathname.includes('favoritesPlaces')) {
+            && !location.pathname.includes('favoritesPlaces')) ||
+            (authorizedUser !== null && currentPlace !== null && authorizedUser.role.split("_")[1] === 'SUPERADMIN'))) {
             setCanEdit(true)
         } else {
             setCanEdit(false)
         }
-    }, [])
+    }, [authorizedUser,currentPlace,location.pathname])
 
     useEffect(() => {
         dispatch(placeActions.findPlaceById({id: params.placeId}))
-    }, [dispatch])
+    }, [dispatch,params.placeId])
 
 
     useEffect(() => {
@@ -62,7 +59,7 @@ const PlaceFullInformation = () => {
             }));
         }
 
-    }, [place])
+    }, [place,authorizedUser])
 
     const addToFavorites = async () => {
         await dispatch(userActions.addPlaceToFavoriteByPlaceIdAndUserLogin({
@@ -81,10 +78,11 @@ const PlaceFullInformation = () => {
     }
 
     const goToNews = () => {
-        navigate(location.pathname.replace('comments', 'news'))
+        navigate(location.pathname.replace('comments', 'news_').split('_')[0])
     }
     const gotoComments = () => {
-        navigate(location.pathname.replace('news', 'comments'))
+        navigate(location.pathname.replace('news', 'comments_').split('_')[0])
+
     }
 
 

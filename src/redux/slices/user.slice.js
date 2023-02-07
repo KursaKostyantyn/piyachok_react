@@ -10,14 +10,15 @@ const initialState = {
     nextPage: 0,
     amountOfPages: 0,
     currentPage: 1,
-    isFavorite: false
+    isFavorite: false,
+    amountOfItems: 0
 }
 
 const findAllUsers = createAsyncThunk(
     'userSlice/findAllUsers',
-    async (_, {rejectWithValue}) => {
+    async ({page}, {rejectWithValue}) => {
         try {
-            const {data} = await userService.findAllUsers();
+            const {data} = await userService.findAllUsers(page);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -41,9 +42,9 @@ const updateUserById = createAsyncThunk(
 
 const findUserById = createAsyncThunk(
     'userSlice/findUserById',
-    async ({id}, {rejectWithValue}) => {
+    async ({userId}, {rejectWithValue}) => {
         try {
-            const {data} = await userService.findUserById(id);
+            const {data} = await userService.findUserById(userId);
             return data
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -101,21 +102,21 @@ const addPlaceToFavoriteByPlaceIdAndUserLogin = createAsyncThunk(
 
 const deletePlaceFromFavoriteByPlaceIdUserLogin = createAsyncThunk(
     'userSlice/deletePlaceFromFavoriteByPlaceIdUserLogin',
-    async ({placeId,login},{rejectWithCalue})=>{
+    async ({placeId, login}, {rejectWithCalue}) => {
         try {
-            const {data} = await userService.deletePlaceFromFavoriteByPlaceIdUserLogin(placeId,login);
-            return  data;
+            const {data} = await userService.deletePlaceFromFavoriteByPlaceIdUserLogin(placeId, login);
+            return data;
         } catch (e) {
             return rejectWithCalue(e.response.data)
         }
     }
 );
 
-const activateUserById = createAsyncThunk(
+const activateUser = createAsyncThunk(
     'userSlice/activateUserById',
-    async ({userId},{rejectWithValue})=>{
+    async ({activateToken}, {rejectWithValue}) => {
         try {
-            const {data} = await userService.activateUserById(userId);
+            const {data} = await userService.activateUser(activateToken);
             console.log(data)
             return data;
         } catch (e) {
@@ -126,7 +127,7 @@ const activateUserById = createAsyncThunk(
 
 const sendResetPasswordToken = createAsyncThunk(
     'userSlice/sendResetPasswordToken',
-    async ({userLogin},{rejectWithValue})=>{
+    async ({userLogin}, {rejectWithValue}) => {
         try {
             const {data} = await userService.sendResetPasswordToken(userLogin);
             return data;
@@ -138,9 +139,9 @@ const sendResetPasswordToken = createAsyncThunk(
 
 const resetPasswordAndSetNew = createAsyncThunk(
     'userSlice/resetPasswordAndSetNew',
-    async ({userLogin,resetPasswordToken,password},{rejectedWithValue})=>{
+    async ({userLogin, resetPasswordToken, password}, {rejectedWithValue}) => {
         try {
-            const {data} = await userService.resetPasswordAndSetNew(userLogin,resetPasswordToken,password);
+            const {data} = await userService.resetPasswordAndSetNew(userLogin, resetPasswordToken, password);
             return data;
         } catch (e) {
             return rejectedWithValue(e.response.data)
@@ -156,43 +157,43 @@ const userSlice = createSlice({
         setCurrentUser: (state, action) => {
             state.currentUser = action.payload;
         },
-        setIsFavorite:(state, action) => {
-            state.isFavorite=action.payload;
+        setIsFavorite: (state, action) => {
+            state.isFavorite = action.payload;
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(resetPasswordAndSetNew.fulfilled,(state, action) => {
-                state.errors=null;
-                state.currentUser=action.payload;
+            .addCase(resetPasswordAndSetNew.fulfilled, (state, action) => {
+                state.errors = null;
+                state.currentUser = action.payload;
             })
-            .addCase(resetPasswordAndSetNew.rejected,(state, action) => {
-                state.errors=action.payload;
+            .addCase(resetPasswordAndSetNew.rejected, (state, action) => {
+                state.errors = action.payload;
             })
-            .addCase(sendResetPasswordToken.fulfilled,(state, action) => {
-                state.errors=null;
+            .addCase(sendResetPasswordToken.fulfilled, (state, action) => {
+                state.errors = null;
             })
-            .addCase(sendResetPasswordToken.rejected,(state, action) => {
-                state.errors=action.payload;
+            .addCase(sendResetPasswordToken.rejected, (state, action) => {
+                state.errors = action.payload;
             })
-            .addCase(activateUserById.fulfilled,(state, action) => {
-                state.errors=null;
+            .addCase(activateUser.fulfilled, (state, action) => {
+                state.errors = null;
             })
-            .addCase(activateUserById.rejected,(state, action) => {
-                state.errors=action.payload;
+            .addCase(activateUser.rejected, (state, action) => {
+                state.errors = action.payload;
                 console.log(action.payload)
             })
-            .addCase(deletePlaceFromFavoriteByPlaceIdUserLogin.rejected,(state, action) => {
-                state.errors=action.payload;
+            .addCase(deletePlaceFromFavoriteByPlaceIdUserLogin.rejected, (state, action) => {
+                state.errors = action.payload;
             })
-            .addCase(deletePlaceFromFavoriteByPlaceIdUserLogin.fulfilled,(state, action) => {
-                state.errors=null;
+            .addCase(deletePlaceFromFavoriteByPlaceIdUserLogin.fulfilled, (state, action) => {
+                state.errors = null;
             })
-            .addCase(addPlaceToFavoriteByPlaceIdAndUserLogin.fulfilled,(state, action) => {
-                state.errors=null;
+            .addCase(addPlaceToFavoriteByPlaceIdAndUserLogin.fulfilled, (state, action) => {
+                state.errors = null;
             })
-            .addCase(addPlaceToFavoriteByPlaceIdAndUserLogin.rejected,(state, action) => {
-                state.errors=action.payload;
+            .addCase(addPlaceToFavoriteByPlaceIdAndUserLogin.rejected, (state, action) => {
+                state.errors = action.payload;
             })
             .addCase(checkPlaceIsFavoriteByPlaceIdAndUserLogin.rejected, (state, action) => {
                 state.errors = action.payload;
@@ -211,6 +212,7 @@ const userSlice = createSlice({
                 state.nextPage = action.payload.nextPage
                 state.amountOfPages = action.payload.amountOfPages
                 state.currentPage = action.payload.currentPage
+                state.amountOfItems = action.payload.amountOfItems
             })
             .addCase(deleteUserById.fulfilled, (state, action) => {
                 state.errors = null;
@@ -236,7 +238,13 @@ const userSlice = createSlice({
             })
             .addCase(findAllUsers.fulfilled, (state, action) => {
                 state.errors = null;
-                state.users = action.payload;
+                state.users = action.payload.items;
+                state.previousPage = action.payload.previousPage;
+                state.nextPage = action.payload.nextPage;
+                state.amountOfPages = action.payload.amountOfPages;
+                state.currentPage = action.payload.currentPage;
+                state.amountOfItems = action.payload.amountOfItems
+
             })
             .addCase(findAllUsers.rejected, (state, action) => {
                 state.errors = action.payload;
@@ -246,7 +254,7 @@ const userSlice = createSlice({
 });
 
 
-const {reducer: userReducer, actions: {setCurrentUser,setIsFavorite}} = userSlice;
+const {reducer: userReducer, actions: {setCurrentUser, setIsFavorite}} = userSlice;
 
 const userActions = {
     findAllUsers,
@@ -259,7 +267,7 @@ const userActions = {
     addPlaceToFavoriteByPlaceIdAndUserLogin,
     setIsFavorite,
     deletePlaceFromFavoriteByPlaceIdUserLogin,
-    activateUserById,
+    activateUser,
     sendResetPasswordToken,
     resetPasswordAndSetNew
 

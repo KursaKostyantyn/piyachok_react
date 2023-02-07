@@ -5,11 +5,10 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 
 import {commentsActions} from "../../redux";
 import css from './CommentForm.module.css'
-import {commentService} from "../../services";
 
 
 const CommentForm = () => {
-    const {register, handleSubmit, reset, setValue} = useForm();
+    const {register, handleSubmit, setValue} = useForm();
     const {currentComment} = useSelector(state => state.comments);
     const {authorizedUser} = useSelector(state => state.auth);
     const {currentPlace} = useSelector(state => state.places);
@@ -21,13 +20,13 @@ const CommentForm = () => {
 
     useEffect(() => {
         if (location.pathname.includes('updateComment')) {
-            dispatch(commentsActions.findCommentById({id: params.myCommentsId}))
+            dispatch(commentsActions.findCommentById({commentId: params.commentId}))
         }
-    }, [dispatch])
+    }, [dispatch,location.pathname,params.commentId])
 
     useEffect(() => {
 
-        if (params.myCommentsId && currentComment !== null) {
+        if (params.commentId && currentComment !== null) {
             setValue('userLogin', currentComment.userLogin)
             setValue('placeName', currentComment.placeName)
             setValue('text', currentComment.text)
@@ -38,7 +37,7 @@ const CommentForm = () => {
             setValue('placeName', currentPlace.name)
         }
 
-    }, [currentComment, currentPlace, authorizedUser])
+    }, [currentComment, currentPlace, authorizedUser,params.commentId])
 
     const saveComment = async (data) => {
         data.placeId = params.placeId;
@@ -48,9 +47,9 @@ const CommentForm = () => {
 
     const updateComment = async (data) => {
         data.placeId = params.placeId;
-        data.id=currentComment.id;
+        data.id = currentComment.id;
         console.log(data)
-        await dispatch(commentsActions.updateComment({comment:data}))
+        await dispatch(commentsActions.updateComment({comment: data}))
         navigate(location.pathname.replace('updateComment', ''))
     }
 

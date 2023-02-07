@@ -9,8 +9,9 @@ const initialState = {
     currentPlace: null,
     previousPage: 0,
     nextPage: 0,
-    amountOfPages:0,
-    currentPage:1
+    amountOfPages: 0,
+    currentPage: 1,
+    amountOfItems: 0
 }
 
 const findAllPlaces = createAsyncThunk(
@@ -39,7 +40,7 @@ const findPlaceById = createAsyncThunk(
 
 const deletePlaceById = createAsyncThunk(
     'placeSlice/deletePlaceById',
-    async ({id},{rejectWithValue})=>{
+    async ({id}, {rejectWithValue}) => {
         try {
             const {data} = await placeService.deletePlaceById(id);
             return data;
@@ -51,9 +52,9 @@ const deletePlaceById = createAsyncThunk(
 
 const updatePlaceById = createAsyncThunk(
     'placeSlice/updatePlaceById',
-    async ({id,place},{rejectWithValue})=>{
+    async ({id, place}, {rejectWithValue}) => {
         try {
-            const {data} = await placeService.updatePlaceById(id,place);
+            const {data} = await placeService.updatePlaceById(id, place);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -63,9 +64,21 @@ const updatePlaceById = createAsyncThunk(
 
 const savePLace = createAsyncThunk(
     'placeSlice/savePlace',
-    async ({userId, place},{rejectWithValue})=>{
+    async ({userId, place}, {rejectWithValue}) => {
         try {
-            const {data} = await placeService.savePlace(place,userId);
+            const {data} = await placeService.savePlace(place, userId);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const findPlaceByUserLogin = createAsyncThunk(
+    'placeSlice/findPlaceByUserLogin',
+    async ({userLogin, page}, {rejectWithValue}) => {
+        try {
+            const {data} = await placeService.findPlaceByUserLogin(userLogin, page);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -77,24 +90,36 @@ const placeSlice = createSlice({
     name: 'placeSlice',
     initialState,
     reducers: {
-        setCurrentPlace:(state, action) => {
-            state.currentPlace=action.payload;
+        setCurrentPlace: (state, action) => {
+            state.currentPlace = action.payload;
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(savePLace.fulfilled, (state, action) => {
-                state.erros=null;
+            .addCase(findPlaceByUserLogin.fulfilled, (state, action) => {
+                state.errors = null;
+                state.places = action.payload.items
+                state.previousPage = action.payload.previousPage
+                state.nextPage = action.payload.nextPage
+                state.amountOfPages = action.payload.amountOfPages
+                state.currentPage = action.payload.currentPage
+                state.amountOfItems=action.payload.amountOfItems
             })
-            .addCase(updatePlaceById.fulfilled,(state, action) => {
-                state.errors=null;
-                state.currentPlace=action.payload;
+            .addCase(findPlaceByUserLogin.rejected, (state, action) => {
+                state.errors = action.payload
+            })
+            .addCase(savePLace.fulfilled, (state, action) => {
+                state.erros = null;
+            })
+            .addCase(updatePlaceById.fulfilled, (state, action) => {
+                state.errors = null;
+                state.currentPlace = action.payload;
             })
             .addCase(deletePlaceById.fulfilled, (state, action) => {
-                state.errors=null;
+                state.errors = null;
             })
-            .addCase(deletePlaceById.rejected,(state, action) => {
-                state.errors=action.payload;
+            .addCase(deletePlaceById.rejected, (state, action) => {
+                state.errors = action.payload;
             })
             .addCase(findAllPlaces.fulfilled, (state, action) => {
                 state.errors = null;
@@ -102,7 +127,8 @@ const placeSlice = createSlice({
                 state.previousPage = action.payload.previousPage
                 state.nextPage = action.payload.nextPage
                 state.amountOfPages = action.payload.amountOfPages
-                state.currentPage=action.payload.currentPage
+                state.currentPage = action.payload.currentPage
+                state.amountOfItems=action.payload.amountOfItems
             })
             .addCase(findAllPlaces.rejected, (state, action) => {
                 state.errors = action.payload;
@@ -117,7 +143,7 @@ const placeSlice = createSlice({
     }
 });
 
-const {reducer: placeReducer, actions:{setCurrentPlace}} = placeSlice;
+const {reducer: placeReducer, actions: {setCurrentPlace}} = placeSlice;
 
 
 const placeActions = {
@@ -125,7 +151,8 @@ const placeActions = {
     findPlaceById,
     deletePlaceById,
     savePLace,
-    setCurrentPlace
+    setCurrentPlace,
+    findPlaceByUserLogin
 }
 
 export {

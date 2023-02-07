@@ -9,14 +9,15 @@ const initialState = {
     previousPage: 0,
     nextPage: 0,
     amountOfPages:0,
-    currentPage:1
+    currentPage:1,
+    amountOfItems:0
 }
 
 const findCommentsByUserLogin = createAsyncThunk(
     'commentsSlice/findCommentsByUserLogin',
-    async ({login}, {rejectWithValue}) => {
+    async ({login, page,old}, {rejectWithValue}) => {
         try {
-            const {data} = await commentService.findCommentsByUserLogin(login);
+            const {data} = await commentService.findCommentsByUserLogin(login,page,old);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -26,9 +27,9 @@ const findCommentsByUserLogin = createAsyncThunk(
 
 const findCommentById = createAsyncThunk(
     'commentsSlice/findCommentById',
-    async ({id},{rejectWithValue})=>{
+    async ({commentId},{rejectWithValue})=>{
         try {
-            const {data} = await commentService.findCommentById(id);
+            const {data} = await commentService.findCommentById(commentId);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -72,6 +73,18 @@ const updateComment = createAsyncThunk(
     }
 );
 
+const findAllComments = createAsyncThunk(
+    'commentsSlice/findAllComments',
+    async ({page,old},{rejectWithValue})=>{
+        try {
+            const {data} = await commentService.findAllComments(page,old);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 const commentsSlice = createSlice({
     name: 'commentsSlice',
     initialState,
@@ -82,6 +95,18 @@ const commentsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(findAllComments.fulfilled,(state, action) => {
+                state.errors=null;
+                state.comments=action.payload.items;
+                state.previousPage=action.payload.previousPage;
+                state.nextPage=action.payload.nextPage;
+                state.amountOfPages=action.payload.amountOfPages
+                state.amountOfItems=action.payload.amountOfItems;
+                state.currentPage=action.payload.currentPage;
+            })
+            .addCase(findAllComments.rejected, (state, action) => {
+                state.errors=action.payload;
+            })
             .addCase(updateComment.rejected,(state, action) => {
                 state.errors=null;
             })
@@ -105,6 +130,7 @@ const commentsSlice = createSlice({
                 state.nextPage = action.payload.nextPage
                 state.amountOfPages = action.payload.amountOfPages
                 state.currentPage=action.payload.currentPage
+                state.amountOfItems=action.payload.amountOfItems
             })
             .addCase(findCommentById.fulfilled,(state, action) => {
                 state.errors=null;
@@ -115,7 +141,12 @@ const commentsSlice = createSlice({
             })
             .addCase(findCommentsByUserLogin.fulfilled, (state, action) => {
                 state.errors = null;
-                state.comments = action.payload;
+                state.comments=action.payload.items;
+                state.previousPage=action.payload.previousPage;
+                state.nextPage=action.payload.nextPage;
+                state.amountOfPages=action.payload.amountOfPages
+                state.amountOfItems=action.payload.amountOfItems;
+                state.currentPage=action.payload.currentPage;
             })
             .addCase(findCommentsByUserLogin.rejected, (state, action) => {
                 state.errors = null;
@@ -131,7 +162,8 @@ const commentsActions = {
     findCommentById,
     findCommentsByPlaceId,
     saveComment,
-    updateComment
+    updateComment,
+    findAllComments
 }
 
 export {

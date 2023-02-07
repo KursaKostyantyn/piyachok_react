@@ -1,28 +1,30 @@
-import {useLocation, useNavigate, useParams, useSearchParams} from "react-router-dom";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect,useState} from "react";
+import {useEffect, useState} from "react";
 
 import {commentsActions} from "../../redux";
 import {Comment} from "../comment/Comment";
 
 
-
-const Comments = () => {
+const PlaceComments = () => {
     const params = useParams();
     const dispatch = useDispatch();
     const {comments, previousPage, nextPage, amountOfPages, currentPage} = useSelector(state => state.comments);
     const [query, setQuery] = useSearchParams({page: '1'});
     const [newUp, setNewUp] = useState(true);
     const navigate = useNavigate();
-    const location = useLocation();
 
     const {authorizedUser} = useSelector(state => state.auth);
 
     useEffect(() => {
         if (params.placeId) {
-            dispatch(commentsActions.findCommentsByPlaceId({placeId: params.placeId, page: query.get('page'),old: newUp}))
+            dispatch(commentsActions.findCommentsByPlaceId({
+                placeId: params.placeId,
+                page: query.get('page'),
+                old: newUp
+            }))
         }
-    }, [newUp,query])
+    }, [newUp, query,params.placeId])
 
     const newest = () => {
         setNewUp(!newUp);
@@ -38,7 +40,7 @@ const Comments = () => {
         setQuery({page: `${page}`})
     };
 
-    const addComment=()=>{
+    const addComment = () => {
         navigate('addComment')
     }
 
@@ -57,4 +59,4 @@ const Comments = () => {
     );
 };
 
-export {Comments};
+export {PlaceComments};
