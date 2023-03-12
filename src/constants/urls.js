@@ -14,7 +14,9 @@ const urls={
     types:'/types',
     comments:'/comments',
     ratings:'/ratings',
-    activate:'/activate'
+    activate:'/activate',
+    search:'/search',
+    features:'/features'
 }
 
 export {

@@ -12,7 +12,12 @@ const userService = {
     deletePlaceFromFavoriteByPlaceIdUserLogin: (placeId, login) => axiosService.delete(`${urls.users}/favoritePlaces/delete?placeId=${placeId}&login=${login}`),
     activateUser: (activateToken) => axiosService.get(`${urls.activate}`, {params: {activateToken}}),
     sendResetPasswordToken: (userLogin) => axiosService.get(`${urls.users}/sendResetPasswordToken`, {params: {userLogin}}),
-    resetPasswordAndSetNew:(userLogin,resetPasswordToken,password)=>axiosService.get(`${urls.users}/resetPassword`,{params:{userLogin,resetPasswordToken,password}})
+    resetPasswordAndSetNew:(userLogin,resetPasswordToken,password)=>axiosService.get(`${urls.users}/resetPassword`,{params:{userLogin,resetPasswordToken,password}}),
+    addPhotoToUserByLogin:(formData)=>axiosService.put(`${urls.users}/addPhoto`,formData,{
+        headers:{
+            "Content-Type": "multipart/form-data"
+        }
+    })
 
 }
 

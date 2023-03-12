@@ -1,6 +1,4 @@
 import {Navigate, Route, Routes} from "react-router-dom";
-import {useDispatch} from "react-redux";
-import {useEffect} from "react";
 
 import {LoggedLayout, LoginLayout, MainLayout} from "./layouts";
 import {
@@ -8,7 +6,11 @@ import {
     AllNewsPage,
     CommentFormPage,
     CommentFullInformationPage,
-    CommentsPage, FavoritePlacesPage,
+    CommentsPage,
+    FavoritePlacesPage,
+    FeatureFormPage,
+    FeatureFullInformationPage,
+    FeaturesPage,
     LoginFormPage,
     MainNewsPage,
     MyNewsPage,
@@ -25,21 +27,19 @@ import {
     RatingFullInformationPage,
     RegisterFormPage,
     ResetPasswordFormPage,
-    SendResetPasswordTokenFormPage, UserFormPage,
+    SearchFormPage,
+    SendResetPasswordTokenFormPage,
+    TypeFormPage,
+    TypeFullInformationPage,
+    TypesPage,
+    UserFormPage,
     UserFullInformationPage,
     UserProfilePage,
     UsersPage
 } from "./pages";
-import {authActions} from "./redux";
 
 
 const App = () => {
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(authActions.getAuthorizedUser())
-    }, [dispatch])
 
     return (
         <div>
@@ -57,7 +57,10 @@ const App = () => {
                     <Route path={'places'}>
                         <Route path={''} element={<PlacesPage/>}/>
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
-                            <Route path={'news'} element={<PlaceNewsPage/>}/>
+                            <Route path={'news'}>
+                                <Route path={''}  element={<PlaceNewsPage/>}/>
+                                <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
+                            </Route>
                             <Route path={'comments'}>
                                 <Route path={''} element={<PlaceCommentsPage/>}/>
                                 <Route path={':commentId'} element={<CommentFullInformationPage/>}/>
@@ -65,7 +68,7 @@ const App = () => {
                             </Route>
 
 
-                            <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
+
                         </Route>
                     </Route>
                     <Route path={'news'}>
@@ -80,6 +83,22 @@ const App = () => {
                         </Route>
 
                     </Route>
+                    <Route path={'search'} >
+                        <Route path={''} element={<SearchFormPage/>}/>
+                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
+                            <Route path={'news'}>
+                                <Route path={''}  element={<PlaceNewsPage/>}/>
+                                <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
+                            </Route>
+                            <Route path={'comments'}>
+                                <Route path={''} element={<PlaceCommentsPage/>}/>
+                                <Route path={':commentId'} element={<CommentFullInformationPage/>}/>
+                                <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
+                            </Route>
+
+                        </Route>
+                    </Route>
+
                 </Route>
                 <Route path={'/myCabinet'} element={<LoggedLayout/>}>
                     <Route index element={<Navigate to={'profile'}/>}/>
@@ -162,6 +181,7 @@ const App = () => {
                     </Route>
 
                     <Route path={'allPlaces'}>
+                        <Route path={':placeId/update'} element={<PlaceFormPage/>}/>
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
                             <Route path={''} element={<PlaceNewsPage/>}/>
                             <Route path={'news'}>
@@ -201,6 +221,45 @@ const App = () => {
                             </Route>
                         </Route>
                     </Route>
+
+                    <Route path={'allTypes'}>
+                        <Route path={''} element={<TypesPage/>}/>
+                        <Route path={':typeId/updateType'} element={<TypeFormPage/>}/>
+                        <Route path={':typeId'} element={<TypeFullInformationPage/>}/>
+                        <Route path={'createType'} element={<TypeFormPage/>}/>
+                    </Route>
+
+                    <Route path={'notActivated'}>
+                        <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
+                            <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'news'}>
+                                <Route path={''} element={<PlaceNewsPage/>}/>
+                                <Route path={'news/:newsId'}>
+                                    <Route path={'update'} element={<NewsFormPage/>}/>
+                                    <Route path={''} element={<OneNewsFullInformationPage/>}/>
+                                </Route>
+                            </Route>
+                            <Route path={'comments'}>
+                                <Route path={''} element={<PlaceCommentsPage/>}/>
+                                <Route path={'addComment'} element={<CommentFormPage/>}/>
+                                <Route path={':commentId'}>
+                                    <Route path={''} element={<CommentFullInformationPage/>}/>
+                                    <Route path={'updateComment'} element={<CommentFormPage/>}/>
+                                </Route>
+                            </Route>
+                            <Route path={'news/addNews'} element={<NewsFormPage/>}/>
+                        </Route>
+                        <Route path={''} element={<PlacesPage/>}/>
+                    </Route>
+
+                    <Route path={'features'}>
+                        <Route path={''} element={<FeaturesPage/>}/>
+                        <Route path={':featureId/updateFeature'} element={<FeatureFormPage/>}/>
+                        <Route path={':featureId'} element={<FeatureFullInformationPage/>}/>
+                        <Route path={'createFeature'} element={<FeatureFormPage/>}/>
+                    </Route>
+
+
                 </Route>
 
                 <Route path={'*'} element={<NotfoundPage/>}/>

@@ -35,4 +35,12 @@ export * from './activateUser/ActivateUser';
 export * from './sendResetPasswordTokenForm/SendResetPasswordTokenForm';
 export * from './userFullInformation/UserFullInformation';
 export * from './comments/Comments';
-
+export * from './types/Types';
+export * from './typeShortInformation/TypeShortInformation';
+export * from './typeFullInformation/TypeFullInformation';
+export * from './placeSmallImage/PlaceSmallImage';
+export * from './filters/Filters';
+export * from './features/Features';
+export * from './feature/Feature';
+export * from './featureFullInformation/FeatureFullInformation';
+export * from './featureForm/featureForm';

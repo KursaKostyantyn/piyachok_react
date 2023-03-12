@@ -65,9 +65,21 @@ const CabinetMenu = () => {
         navigate('news')
     }
 
+    const allTypes=()=>{
+        navigate('allTypes')
+    }
+
+    const notActivated=()=>{
+        navigate('notActivated')
+    }
+
+    const allFeatures=()=>{
+        navigate('features')
+    }
+
 
     return (
-        <div>
+        <div className={css.Wrap}>
             CabinetMenu
             <button className={css.CabinetMenuButtons} onClick={mainMenu}>Головна сторінка</button>
             <button className={css.CabinetMenuButtons} onClick={userProfile}>Мій профіль</button>
@@ -81,6 +93,9 @@ const CabinetMenu = () => {
             {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allUsers}>Всі користувачі</button>}
             {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allComments}>Всі коментарі</button>}
             {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allNews}>Всі новини</button>}
+            {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allTypes}>Всі типи закладів</button>}
+            {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={notActivated}>Всі не активовані заклади</button>}
+            {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allFeatures}>Всі особливості закладів</button>}
 
 
         </div>

@@ -12,6 +12,7 @@ const initialState = {
     currentPage: 1,
     isFavorite: false,
     amountOfItems: 0
+
 }
 
 const findAllUsers = createAsyncThunk(
@@ -149,6 +150,18 @@ const resetPasswordAndSetNew = createAsyncThunk(
     }
 );
 
+const addPhotoToUserByLogin = createAsyncThunk(
+    'userSlice/addPhotoToUserByLogin',
+    async ({formData},{rejectWithValue})=>{
+        try {
+            const {data} = await userService.addPhotoToUserByLogin(formData);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 
 const userSlice = createSlice({
     name: 'userSlice',
@@ -163,6 +176,12 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(addPhotoToUserByLogin.fulfilled, (state, action) => {
+                state.errors=null;
+            })
+            .addCase(addPhotoToUserByLogin.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
             .addCase(resetPasswordAndSetNew.fulfilled, (state, action) => {
                 state.errors = null;
                 state.currentUser = action.payload;
@@ -269,7 +288,8 @@ const userActions = {
     deletePlaceFromFavoriteByPlaceIdUserLogin,
     activateUser,
     sendResetPasswordToken,
-    resetPasswordAndSetNew
+    resetPasswordAndSetNew,
+    addPhotoToUserByLogin
 
 }
 

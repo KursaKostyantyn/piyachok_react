@@ -11,14 +11,15 @@ const initialState = {
     nextPage: 0,
     amountOfPages: 0,
     currentPage: 1,
-    amountOfItems: 0
+    amountOfItems: 0,
+    mainPlacePhoto: 'http://via.placeholder.com/250x300?text=No+Photo'
 }
 
 const findAllPlaces = createAsyncThunk(
     "placeSlice/findAllPlaces",
-    async ({page}, {rejectWithValue}) => {
+    async ({page, old, alphabet, rating, averageCheck}, {rejectWithValue}) => {
         try {
-            const {data} = await placeService.findAllPlaces(page);
+            const {data} = await placeService.findAllPlaces(page, alphabet, old, rating, averageCheck);
             return data
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -52,9 +53,9 @@ const deletePlaceById = createAsyncThunk(
 
 const updatePlaceById = createAsyncThunk(
     'placeSlice/updatePlaceById',
-    async ({id, place}, {rejectWithValue}) => {
+    async ({placeId, place}, {rejectWithValue}) => {
         try {
-            const {data} = await placeService.updatePlaceById(id, place);
+            const {data} = await placeService.updatePlaceById(placeId, place);
             return data;
         } catch (e) {
             return rejectWithValue(e.response.data)
@@ -86,24 +87,94 @@ const findPlaceByUserLogin = createAsyncThunk(
     }
 );
 
+const addPhotosToPlaceById = createAsyncThunk(
+    'placeSlice/addPhotosToPlaceById',
+    async ({formData}, {rejectWithValue}) => {
+        try {
+            const {data} = await placeService.addPhotosToPlaceById(formData);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const findPLaceByName = createAsyncThunk(
+    'placeSlice/findPLaceByName',
+    async ({placeName, page}, {rejectWithValue}) => {
+        try {
+            const {data} = await placeService.findPLaceByName(placeName, page);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const findAllActivatedPlaces = createAsyncThunk(
+    'placeSlice/findAllActivatedPlaces',
+    async ({page, old, alphabet, rating, averageCheck}, {rejectWithValue}) => {
+        try {
+            const {data} = await placeService.findAllActivatedPlaces(page, alphabet, old, rating, averageCheck);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const fillTheResponse = (state, action) => {
+    state.errors = null;
+    state.places = action.payload.items
+    state.previousPage = action.payload.previousPage
+    state.nextPage = action.payload.nextPage
+    state.amountOfPages = action.payload.amountOfPages
+    state.currentPage = action.payload.currentPage
+    state.amountOfItems = action.payload.amountOfItems
+}
+
 const placeSlice = createSlice({
     name: 'placeSlice',
     initialState,
     reducers: {
         setCurrentPlace: (state, action) => {
             state.currentPlace = action.payload;
+        },
+        setMainPLacePhoto: (state, action) => {
+            state.mainPlacePhoto = action.payload;
+        },
+        setPlaces: (state, action) => {
+            state.places = action.payload;
+            state.previousPage = action.payload
+            state.nextPage = action.payload
+            state.amountOfPages = action.payload
+            state.currentPage = action.payload
+            state.amountOfItems = action.payload
         }
     },
     extraReducers: (builder) => {
         builder
-            .addCase(findPlaceByUserLogin.fulfilled, (state, action) => {
+            .addCase(findAllActivatedPlaces.fulfilled, (state, action) => {
+                fillTheResponse(state, action);
+            })
+            .addCase(findAllActivatedPlaces.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
+            .addCase(findPLaceByName.fulfilled, (state, action) => {
+                fillTheResponse(state, action);
+            })
+            .addCase(findPLaceByName.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
+            .addCase(addPhotosToPlaceById.fulfilled, (state, action) => {
                 state.errors = null;
-                state.places = action.payload.items
-                state.previousPage = action.payload.previousPage
-                state.nextPage = action.payload.nextPage
-                state.amountOfPages = action.payload.amountOfPages
-                state.currentPage = action.payload.currentPage
-                state.amountOfItems=action.payload.amountOfItems
+                state.currentPlace = action.payload;
+            })
+            .addCase(addPhotosToPlaceById.rejected, (state, action) => {
+                state.errors = action.payload
+            })
+            .addCase(findPlaceByUserLogin.fulfilled, (state, action) => {
+                fillTheResponse(state, action);
             })
             .addCase(findPlaceByUserLogin.rejected, (state, action) => {
                 state.errors = action.payload
@@ -122,13 +193,7 @@ const placeSlice = createSlice({
                 state.errors = action.payload;
             })
             .addCase(findAllPlaces.fulfilled, (state, action) => {
-                state.errors = null;
-                state.places = action.payload.items
-                state.previousPage = action.payload.previousPage
-                state.nextPage = action.payload.nextPage
-                state.amountOfPages = action.payload.amountOfPages
-                state.currentPage = action.payload.currentPage
-                state.amountOfItems=action.payload.amountOfItems
+                fillTheResponse(state, action);
             })
             .addCase(findAllPlaces.rejected, (state, action) => {
                 state.errors = action.payload;
@@ -143,7 +208,7 @@ const placeSlice = createSlice({
     }
 });
 
-const {reducer: placeReducer, actions: {setCurrentPlace}} = placeSlice;
+const {reducer: placeReducer, actions: {setCurrentPlace, setMainPLacePhoto, setPlaces}} = placeSlice;
 
 
 const placeActions = {
@@ -152,7 +217,13 @@ const placeActions = {
     deletePlaceById,
     savePLace,
     setCurrentPlace,
-    findPlaceByUserLogin
+    findPlaceByUserLogin,
+    addPhotosToPlaceById,
+    setMainPLacePhoto,
+    findPLaceByName,
+    setPlaces,
+    findAllActivatedPlaces,
+    updatePlaceById
 }
 
 export {

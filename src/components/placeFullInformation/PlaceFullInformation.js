@@ -1,46 +1,78 @@
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+import {useForm} from "react-hook-form";
 
-import {placeActions, userActions} from "../../redux";
 import css from "./PlaceFullInformation.module.css";
-import {RatingForm} from "../ratingForm/RatingForm";
+import {placeActions, userActions} from "../../redux";
+import {RatingForm, PlaceSmallImage} from "../index";
 
 
 const PlaceFullInformation = () => {
-    const params = useParams();
-    const {currentPlace} = useSelector(state => state.places);
+
+    const {currentPlace, mainPlacePhoto} = useSelector(state => state.places);
     const {authorizedUser} = useSelector(state => state.auth);
     const {isFavorite} = useSelector(state => state.users);
+
+    const [place, setPlace] = useState(null);
+    const [canEdit, setCanEdit] = useState(false);
+    const [photos, setPhotos] = useState([]);
+    const [addPhotoError, setAddPhotoError] = useState(null);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [place, setPlace] = useState(null);
     const location = useLocation();
-    const [canEdit, setCanEdit] = useState(false);
-
+    const params = useParams();
+    const {register, handleSubmit} = useForm();
 
     useEffect(() => {
         if (((authorizedUser !== null
-            && currentPlace !== null
-            && authorizedUser.id === currentPlace.userId
-            && !location.pathname.includes('favoritesPlaces')) ||
+                && currentPlace !== null
+                && authorizedUser.id === currentPlace.userId
+                && !location.pathname.includes('favoritesPlaces')) ||
             (authorizedUser !== null && currentPlace !== null && authorizedUser.role.split("_")[1] === 'SUPERADMIN'))) {
             setCanEdit(true)
         } else {
             setCanEdit(false)
         }
-    }, [authorizedUser,currentPlace,location.pathname])
+    }, [authorizedUser, currentPlace, location.pathname])
 
     useEffect(() => {
         dispatch(placeActions.findPlaceById({id: params.placeId}))
-    }, [dispatch,params.placeId])
+    }, [dispatch, params.placeId])
 
+
+    useEffect(() => {
+        if (currentPlace != null && currentPlace.photos.length !== 0) {
+            let arr = []
+            dispatch(placeActions.setMainPLacePhoto(`http://localhost:8080/places/placePhoto/${currentPlace.photos[0]}`))
+            for (let i = 0; i < currentPlace.photos.length; i++) {
+                arr.push(`http://localhost:8080/places/placePhoto/${currentPlace.photos[i]}`)
+                placeActions.setMainPLacePhoto(currentPlace.photos[i])
+
+            }
+            setPhotos(arr);
+        } else {
+            setPhotos(['http://via.placeholder.com/250x300?text=No+Photo'])
+        }
+    }, [currentPlace])
 
     useEffect(() => {
         if (currentPlace !== null) {
             setPlace(currentPlace)
         }
     }, [currentPlace])
+
+    useEffect(() => {
+        if (place !== null && authorizedUser !== null) {
+            dispatch(userActions.checkPlaceIsFavoriteByPlaceIdAndUserLogin({
+                placeId: place.id,
+                login: authorizedUser.login
+            }));
+        }
+
+    }, [place, authorizedUser])
+
 
     const deletePlace = async () => {
         await dispatch(placeActions.deletePlaceById({id: place.id}))
@@ -51,15 +83,6 @@ const PlaceFullInformation = () => {
         navigate('update')
     }
 
-    useEffect(() => {
-        if (place !== null && authorizedUser !== null) {
-            dispatch(userActions.checkPlaceIsFavoriteByPlaceIdAndUserLogin({
-                placeId: place.id,
-                login: authorizedUser.login
-            }));
-        }
-
-    }, [place,authorizedUser])
 
     const addToFavorites = async () => {
         await dispatch(userActions.addPlaceToFavoriteByPlaceIdAndUserLogin({
@@ -85,13 +108,45 @@ const PlaceFullInformation = () => {
 
     }
 
+    const addPhotos = async (data) => {
+        let formData = new FormData();
+        if (data.photos.length !== 0 && data.photos.length <= 5) {
+            setAddPhotoError(false);
+            formData.append('placeId', place.id)
+            for (let photo of data.photos) {
+                formData.append('photos', photo);
+            }
+            await dispatch(placeActions.addPhotosToPlaceById({formData: formData}))
+        } else {
+            setAddPhotoError(true)
+        }
+
+    }
 
     return (
         <div>
-            {place && <div className={css.Wrap}>
-                <img className={css.PlaceFullInformationPhoto}
-                     src="https://upload.wikimedia.org/wikipedia/commons/d/d6/Nophoto.jpg"
-                     alt="place photo"/>
+            {place && <div className={css.PlaceWrap}>
+
+                <div className={css.PlaceFullInformationPhotoSection}>
+                    <img className={css.PhotoSection}
+                         src={mainPlacePhoto}
+                         alt="place"/>
+                    <div className={css.SmallImageSection}>
+                        {photos.map((photo, index) => <PlaceSmallImage key={index} photo={photo}/>)}
+                    </div>
+                    <span>Оберіть 5 фотографій</span>
+                    <form onSubmit={handleSubmit(addPhotos)}>
+                        <input type={'file'}
+                               accept='image/jpeg, image/png'
+                               multiple
+                               {...register('photos')}/> <br/>
+                        <button>Додати фото</button>
+                    </form>
+                    {addPhotoError && <span>Забагато фотографій</span>}
+
+                </div>
+
+
                 {canEdit &&
                     <div>
                         <button onClick={updatePlace}>Редагувати заклад</button>
@@ -103,20 +158,34 @@ const PlaceFullInformation = () => {
                             <button onClick={addToFavorites}>Додати до улюблених</button>}
                     </div>}
                 <div>id: {place.id}</div>
-                <div>name: {place.name}</div>
+                <div>Назва закладу: {place.name}</div>
 
-                <div> city: {place.address.city} <br/>
-                    street: {place.address.street}<br/>
-                    number: {place.address.number}<br/>
+                <div> Місто: {place.address.city} <br/>
+                    Вулиця: {place.address.street}<br/>
+                    Номер будинку: {place.address.number}<br/>
                 </div>
-                <div>schedule: {place.schedule}</div>
-                <div>phone: {place.contacts.phone}</div>
-                <div>email: {place.contacts.email}</div>
-                <div>averageCheck: {place.averageCheck}</div>
-                <div>averageRating: {place.averageRating}</div>
-                <div>creationDate: {place.creationDate}</div>
-                <div>type: {place.type}</div>
-                <div>description: {place.description}</div>
+                <div>Розклад:
+                    <div>Пн: {place.workSchedule.mondayStart}-{place.workSchedule.mondayEnd}</div>
+                    <div>Вт: {place.workSchedule.tuesdayStart}-{place.workSchedule.tuesdayEnd}</div>
+                    <div>Ср: {place.workSchedule.wednesdayStart}-{place.workSchedule.wednesdayEnd}</div>
+                    <div>Чт: {place.workSchedule.thursdayStart}-{place.workSchedule.thursdayEnd}</div>
+                    <div>Пт: {place.workSchedule.fridayStart}-{place.workSchedule.fridayEnd}</div>
+                    <div>Сб: {place.workSchedule.saturdayStart}-{place.workSchedule.saturdayEnd}</div>
+                    <div>Нд: {place.workSchedule.sundayStart}-{place.workSchedule.sundayEnd}</div>
+                </div>
+                <div>Телефон: {place.contacts.phone}</div>
+                <div>Електрона пошта: {place.contacts.email}</div>
+                <div>Середній чек: {place.averageCheck}</div>
+                <div>Середній рейтінг: {place.averageRating}</div>
+                <div>Дата створення: {place.creationDate}</div>
+                <div>Тип закладу: {place.types.map(type => type.name + ',')}</div>
+                <div>Опис закладу: {place.description}</div>
+
+
+                {place.features.length !== 0 && <div>Особливості
+                    закладу:{place.features.map(feature => feature.name + ',')} </div>}
+
+
             </div>}
             {<div><RatingForm/></div>}
 
@@ -126,6 +195,6 @@ const PlaceFullInformation = () => {
 
         </div>
     );
-};
+}
 
 export {PlaceFullInformation};

@@ -1,0 +1,14 @@
+.ImgSettings{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.UserFullInformationSection{
+    display: flex;
+    flex-direction: row;
+}
+
+.UserPhotoSection{
+    margin: 5px;
+}

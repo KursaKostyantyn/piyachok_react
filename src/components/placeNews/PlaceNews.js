@@ -25,6 +25,7 @@ const PlaceNews = () => {
         navigate('addNews')
     }
 
+
     return (
         <div>
             <div>

@@ -6,7 +6,9 @@ import {
     newsReducer,
     placeReducer,
     commentsReducer,
-    ratingReducer, typeReducer
+    ratingReducer,
+    typeReducer,
+    featureReducer
 } from "./slices";
 
 
@@ -17,7 +19,8 @@ const rootReducer = combineReducers({
     users: userReducer,
     comments: commentsReducer,
     ratings: ratingReducer,
-    types: typeReducer
+    types: typeReducer,
+    features: featureReducer
 });
 
 const setupStore = configureStore({

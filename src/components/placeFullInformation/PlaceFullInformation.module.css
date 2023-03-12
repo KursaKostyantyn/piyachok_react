@@ -1,9 +1,24 @@
-.PlaceFullInformationPhoto{
-    width: 200px;
-    height: 300px;
+.Wrap{
+    margin-left: 5px;
+}
+
+
+.PlaceFullInformationPhotoSection{
     float: left;
 }
 
-.Wrap{
+.PlaceWrap{
    width: 100vw;
+}
+
+.PhotoSection{
+    width: 250px;
+    height: 300px;
+}
+
+
+
+.SmallImageSection{
+    display: flex;
+    justify-content: left;
 }

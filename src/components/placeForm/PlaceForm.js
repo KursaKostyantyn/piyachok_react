@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {useDispatch, useSelector} from "react-redux";
 
-import {placeActions, typeActions} from "../../redux";
+import {featureActions, placeActions, typeActions, userActions} from "../../redux";
 import css from './PlaceForm.module.css'
 
 
@@ -13,21 +13,32 @@ const PlaceForm = () => {
     const {reset, handleSubmit, setError: {errors}, setValue, register,} = useForm();
     const dispatch = useDispatch();
     const {currentPlace} = useSelector(state => state.places);
+    const {currentUser, users} = useSelector(state => state.users);
     const {authorizedUser} = useSelector(state => state.auth);
     const {types} = useSelector(state => state.types);
+    const {features} = useSelector(state => state.features);
     const [isDisabledCheckBoxActivated, setIsDisabledCheckBoxActivated] = useState('');
     const location = useLocation();
 
 
     useEffect(() => {
-        dispatch(typeActions.findAllTypes())
+        dispatch(typeActions.findAllTypes({page: 1}))
+        dispatch(featureActions.findAllFeatures({page: 1}))
+
     }, [dispatch])
 
     useEffect(() => {
         if (params.placeId !== undefined) {
-            dispatch(placeActions.findPlaceById({id:params.placeId}))
+            dispatch(placeActions.findPlaceById({id: params.placeId}))
+            dispatch(userActions.findAllUsers({page: 1}))
         }
     }, [dispatch])
+
+    useEffect(() => {
+        if (authorizedUser !== null && authorizedUser.role.includes('SUPERADMIN')) {
+            dispatch(userActions.findAllUsers({page: 1}))
+        }
+    }, [])
 
 
     useEffect(() => {
@@ -58,6 +69,9 @@ const PlaceForm = () => {
             for (let i = 0; i < currentPlace.types.length; i++) {
                 setValue(`types.${currentPlace.types[i].name}`, true)
             }
+            for (let i = 0; i < currentPlace.features.length; i++) {
+                setValue(`features.${currentPlace.features[i].name}`, true)
+            }
         }
         if (location.pathname.includes('createPlace')) {
             dispatch(placeActions.setCurrentPlace(null));
@@ -65,16 +79,41 @@ const PlaceForm = () => {
         }
     }, [currentPlace, types])
 
+    useEffect(() => {
+        if (currentPlace != null) {
+            dispatch(userActions.findUserById({userId: currentPlace.userId}))
+        }
+    }, [currentPlace])
+
+    useEffect(() => {
+        if (authorizedUser != null) {
+            setValue("userId", authorizedUser.id)
+        }
+    }, [authorizedUser])
+
+
     const submit = async (data) => {
         let typesForSending = [];
+        let featuresForSending = []
         for (let name in data.types) {
             if (data.types[name] !== false) {
                 typesForSending.push(name);
             }
         }
+        for (let name in data.features) {
+            if (data.features[name] !== false) {
+                featuresForSending.push(name)
+            }
+        }
         data.types = typesForSending;
-        await dispatch(placeActions.savePLace({place: data, userId: authorizedUser.id}));
-        reset();
+        data.features = featuresForSending;
+        if (currentPlace !== null) {
+            await dispatch(placeActions.updatePlaceById({placeId: currentPlace.id, place: data}));
+        } else {
+            await dispatch(placeActions.savePLace({place: data, userId: authorizedUser.id}));
+
+        }
+
     }
 
 
@@ -83,59 +122,82 @@ const PlaceForm = () => {
             <form onSubmit={handleSubmit(submit)}>
                 <div>
                     <h4>Назва закладу</h4>
-                    <input type={'text'} placeholder={'Назва'} {...register('name')}/>
+                    <input type={'text'} required={true} placeholder={'Назва'} {...register('name',)}/>
                 </div>
                 <div>
                     <h3>Адреса закладу:</h3>
                     <h4>Город</h4>
-                    <input type={'text'} placeholder={'город'} {...register('address.city')}/>
+                    <input type={'text'} required={true} placeholder={'город'} {...register('address.city')}/>
                     <div>
                         <h4>Вулиця</h4>
-                        <input type={'text'} placeholder={'Вулиця'} {...register('address.street')}/>
+                        <input type={'text'} required={true} placeholder={'Вулиця'} {...register('address.street')}/>
                     </div>
                     <div>
                         <h4>Номер дому</h4>
-                        <input type={'number'} placeholder={'Номер'} {...register('address.number')}/>
+                        <input type={'number'} required={true} placeholder={'Номер'} {...register('address.number')}/>
                     </div>
                 </div>
                 <div className={css.ScheduleSection}>
                     <h3>График роботи:</h3>
                     <h4>Понеділок</h4>
-                    <input type={'time'}
+                    <input type={'time'} required={true}
                            placeholder={'понеділок'} {...register('workSchedule.mondayStart')}/> - <input
-                    type={'time'} placeholder={'понеділок'} {...register('workSchedule.mondayEnd')}/> <br/>
+
+                    type={'time'} required={true}
+                    placeholder={'понеділок'} {...register('workSchedule.mondayEnd')}/>
+                    <br/>
                     <h4>Вівторок</h4>
-                    <input type={'time'}
+                    <input type={'time'} required={true}
                            placeholder={'вівторок'} {...register('workSchedule.tuesdayStart')}/> - <input
-                    type={'time'} placeholder={'вівторок'} {...register('workSchedule.tuesdayEnd')}/> <br/>
+
+                    type={'time'} required={true}
+                    placeholder={'вівторок'} {...register('workSchedule.tuesdayEnd')}/>
+                    <br/>
                     <h4>Середа</h4>
-                    <input type={'time'}
+                    <input type={'time'} required={true}
                            placeholder={'середа'} {...register('workSchedule.wednesdayStart')}/> - <input
-                    type={'time'} placeholder={'середа'} {...register('workSchedule.wednesdayEnd')}/> <br/>
+
+                    type={'time'} required={true}
+                    placeholder={'середа'} {...register('workSchedule.wednesdayEnd')}/>
+                    <br/>
                     <h4>Четверг</h4>
-                    <input type={'time'}
+                    <input type={'time'} required={true}
                            placeholder={'четверг'} {...register('workSchedule.thursdayStart')}/> - <input
-                    type={'time'} placeholder={'четверг'} {...register('workSchedule.thursdayEnd')}/> <br/>
+
+                    type={'time'} required={true}
+                    placeholder={'четверг'} {...register('workSchedule.thursdayEnd')}/>
+                    <br/>
                     <h4>П'ятниця</h4>
-                    <input type={'time'}
+                    <input type={'time'} required={true}
                            placeholder={'п\'ятниця'} {...register('workSchedule.fridayStart')}/> - <input
-                    type={'time'} placeholder={'п\'ятниця'} {...register('workSchedule.fridayEnd')}/> <br/>
+
+                    type={'time'} required={true}
+                    placeholder={'п\'ятниця'} {...register('workSchedule.fridayEnd')}/>
+                    <br/>
                     <h4>Субота</h4>
-                    <input type={'time'}
+                    <input type={'time'} required={true}
                            placeholder={'субота'} {...register('workSchedule.saturdayStart')}/> - <input
-                    type={'time'} placeholder={'субота'} {...register('workSchedule.saturdayEnd')}/> <br/>
+
+                    type={'time'}
+                    required={true}
+                    placeholder={'субота'} {...register('workSchedule.saturdayEnd')}/>
+                    <br/>
                     <h4>Неділя</h4>
-                    <input type={'time'}
+                    <input type={'time'} required={true}
                            placeholder={'неділя'} {...register('workSchedule.sundayStart')}/> - <input
-                    type={'time'} placeholder={'неділя'} {...register('workSchedule.sundayEnd')}/> <br/>
+
+                    type={'time'}
+                    required={true}
+                    placeholder={'неділя'} {...register('workSchedule.sundayEnd')}/>
+                    <br/>
                 </div>
                 <div>
                     <h4>Телефон</h4>
-                    <input type={'tel'} placeholder={'Телефон'} {...register('contacts.phone')}/>
+                    <input type={'tel'} required={true} placeholder={'Телефон'} {...register('contacts.phone')}/>
                 </div>
                 <div>
                     <h4>Електронна пошта</h4>
-                    <input type={'text'} placeholder={''} {...register('contacts.email')}/>
+                    <input type={'text'} required={true} placeholder={''} {...register('contacts.email')}/>
                 </div>
                 <div>
                     <h4>Активовано</h4>
@@ -144,15 +206,32 @@ const PlaceForm = () => {
                 </div>
                 <div>
                     <h4>Опис закладу</h4>
-                    <textarea placeholder={'Опис закладу'} className={css.TextArea} {...register('description')}/>
+                    <textarea required={true} placeholder={'Опис закладу'}
+                              className={css.TextArea} {...register('description')}/>
                 </div>
                 <div>
                     <h4>Тип закладу</h4>
-                    {types && types.map(type => <div key={type.id}>
+                    {types && types.map(type => <span key={type.id}>
                             <input type={'checkbox'}
                                    value={`${type.name}`}  {...register(`types.${type.name}`)}/> - {type.name}
-                        </div>
+                        </span>
                     )}
+                </div>
+                <div>
+                    <h4>Особливості закладу</h4>
+                    {features && features.map(feature => <span key={feature.id}>
+                        <input type={'checkbox'}
+                               value={`${feature.name}`} {...register(`features.${feature.name}`)}/> - {feature.name}
+                    </span>)}
+                </div>
+                <div>
+                    <h4>Власник закладу</h4>
+                    <select required={true} {...register('userId')}>
+                        {users && users.map(user =>
+                            <option key={user.id} value={user.id}>{user.login}</option>)}
+
+                    </select>
+
                 </div>
                 <button>Зберегти заклад</button>
             </form>

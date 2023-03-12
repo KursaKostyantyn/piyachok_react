@@ -5,5 +5,6 @@ export * from './auth.service';
 export * from './axios.service'
 export * from './comment.service';
 export * from './rating.service';
-export * from './type.service'
+export * from './type.service';
+export * from './features.service';
 

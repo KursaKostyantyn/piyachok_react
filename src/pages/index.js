@@ -29,5 +29,13 @@ export * from './activateUserPage/ActivateUserPage';
 export * from './sendResetPasswordTokenFormPage/SendResetPasswordTokenFormPage';
 export * from './resetPasswordFormPage/ResetPasswordFormPage';
 export * from './commentsPage/CommentsPage';
-export * from './userFormPage/UserFormPage'
+export * from './userFormPage/UserFormPage';
+export * from './typesPage/TypesPage';
+export * from './typeFormPage/TypeFormPage';
+export * from './typeFullInformationPage/TypeFullInformationPage';
+export * from './featureFormPage/FeatureFormPage';
+export * from './featuresPage/FeaturesPage';
+export * from './featureFullInformationPage/FeatureFullInformationPage';
+
+
 
