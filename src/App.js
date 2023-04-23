@@ -18,7 +18,7 @@ import {
     MyRatingPage,
     NewsFormPage,
     NotfoundPage,
-    OneNewsFullInformationPage,
+    OneNewsFullInformationPage, PiyachokFormPage, PiyachoksPage,
     PlaceCommentsPage,
     PlaceFormPage,
     PlaceFullInformationPage,
@@ -57,8 +57,9 @@ const App = () => {
                     <Route path={'places'}>
                         <Route path={''} element={<PlacesPage/>}/>
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
+                            <Route path={'piyachok'} element={<PiyachokFormPage/>}/>
                             <Route path={'news'}>
-                                <Route path={''}  element={<PlaceNewsPage/>}/>
+                                <Route path={''} element={<PlaceNewsPage/>}/>
                                 <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                             </Route>
                             <Route path={'comments'}>
@@ -66,7 +67,6 @@ const App = () => {
                                 <Route path={':commentId'} element={<CommentFullInformationPage/>}/>
                                 <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
                             </Route>
-
 
 
                         </Route>
@@ -83,11 +83,11 @@ const App = () => {
                         </Route>
 
                     </Route>
-                    <Route path={'search'} >
+                    <Route path={'search'}>
                         <Route path={''} element={<SearchFormPage/>}/>
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
                             <Route path={'news'}>
-                                <Route path={''}  element={<PlaceNewsPage/>}/>
+                                <Route path={''} element={<PlaceNewsPage/>}/>
                                 <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                             </Route>
                             <Route path={'comments'}>
@@ -100,6 +100,7 @@ const App = () => {
                     </Route>
 
                 </Route>
+
                 <Route path={'/myCabinet'} element={<LoggedLayout/>}>
                     <Route index element={<Navigate to={'profile'}/>}/>
 
@@ -123,9 +124,9 @@ const App = () => {
                     <Route path={'myPlaces'}>
                         <Route path={':placeId/update'} element={<PlaceFormPage/>}/>
                         <Route path={''} element={<MyPlacesPage/>}/>
-
                         <Route path={':placeId'} element={<PlaceFullInformationPage/>}>
                             <Route path={''} element={<PlaceNewsPage/>}/>
+                            <Route path={'placePiyachoks'} element={<PiyachoksPage/>}/>
                             <Route path={'news'}>
                                 <Route path={''} element={<PlaceNewsPage/>}/>
                                 <Route path={'news/:newsId'}>
@@ -155,6 +156,7 @@ const App = () => {
                             <Route path={'comments/addComment'} element={<CommentFormPage/>}/>
                             <Route path={'news/:newsId'} element={<OneNewsFullInformationPage/>}/>
                         </Route>
+                        <Route path={'piyachok'} element={<PiyachokFormPage/>}/>
                     </Route>
 
                     <Route path={'myComments'}>
@@ -200,6 +202,8 @@ const App = () => {
                                 </Route>
                             </Route>
                             <Route path={'news/addNews'} element={<NewsFormPage/>}/>
+                            <Route path={'piyachok'} element={<PiyachokFormPage/>}/>
+
                         </Route>
                         <Route path={''} element={<PlacesPage/>}/>
                     </Route>
@@ -258,7 +262,6 @@ const App = () => {
                         <Route path={':featureId'} element={<FeatureFullInformationPage/>}/>
                         <Route path={'createFeature'} element={<FeatureFormPage/>}/>
                     </Route>
-
 
                 </Route>
 

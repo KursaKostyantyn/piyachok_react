@@ -16,7 +16,8 @@ const urls={
     ratings:'/ratings',
     activate:'/activate',
     search:'/search',
-    features:'/features'
+    features:'/features',
+    piyachoks:'/piyachoks'
 }
 
 export {

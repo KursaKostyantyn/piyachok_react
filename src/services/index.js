@@ -7,4 +7,6 @@ export * from './comment.service';
 export * from './rating.service';
 export * from './type.service';
 export * from './features.service';
+export * from './piyachok.service';
+
 

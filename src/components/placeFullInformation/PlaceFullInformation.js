@@ -101,10 +101,14 @@ const PlaceFullInformation = () => {
     }
 
     const goToNews = () => {
-        navigate(location.pathname.replace('comments', 'news_').split('_')[0])
+        const pathArr = location.pathname.split('/')
+        const replaceValue = pathArr[pathArr.length - 1]
+        navigate(location.pathname.replace(replaceValue, 'news_').split('_')[0])
     }
     const gotoComments = () => {
-        navigate(location.pathname.replace('news', 'comments_').split('_')[0])
+        const pathArr = location.pathname.split('/')
+        const replaceValue = pathArr[pathArr.length - 1]
+        navigate(location.pathname.replace(replaceValue, 'comments_').split('_')[0])
 
     }
 
@@ -121,6 +125,18 @@ const PlaceFullInformation = () => {
             setAddPhotoError(true)
         }
 
+    }
+
+    const goToPiyachok = () => {
+        const pathArr = location.pathname.split('/')
+        const replaceValue = pathArr[pathArr.length - 1]
+        navigate(location.pathname.replace(replaceValue, 'piyachok'))
+    }
+
+    const showAllPiyachoks=()=>{
+        const pathArr = location.pathname.split('/')
+        const replaceValue = pathArr[pathArr.length - 1]
+        navigate(location.pathname.replace(replaceValue, 'placePiyachoks'))
     }
 
     return (
@@ -152,6 +168,20 @@ const PlaceFullInformation = () => {
                         <button onClick={updatePlace}>Редагувати заклад</button>
                         <button onClick={deletePlace}>Видалити заклад</button>
                     </div>}
+                {!location.pathname.includes('myCabinet') && <div>
+                    {authorizedUser ? <button onClick={goToPiyachok}>пиячок</button> :
+                        <div>
+                            <button disabled={true}>пиячок</button>
+                            - для можливості замовлення авторизуйтесь
+                        </div>
+                    }
+                </div>
+                }
+
+                {location.pathname.includes('myCabinet') && <div>
+                    <button onClick={showAllPiyachoks}>Показати всі замовлення</button>
+                </div>}
+
                 {authorizedUser &&
                     <div>
                         {isFavorite ? <button onClick={deleteFromFavorite}>Видалити з улюблених</button> :

@@ -48,11 +48,11 @@ const Header = () => {
 
     }, [authorizedUser])
 
-    const login =async () => {
+    const login = async () => {
         await dispatch(authActions.setErrors(null))
         navigate("/login");
     }
-    const register =async () => {
+    const register = async () => {
         await dispatch(authActions.setErrors(null))
         navigate("/register")
     }
@@ -67,7 +67,7 @@ const Header = () => {
         navigate('/myCabinet')
     }
 
-    const goToMainPage=()=>{
+    const goToMainPage = () => {
         navigate('/')
     }
 
@@ -77,14 +77,14 @@ const Header = () => {
             <div className={css.ButtonSection}>
                 {isAuth ?
                     <div>
-                        {!isCabinet && <button className={css.Buttons} onClick={myCabinet}>Мій кабінет</button>}
+                        {!isCabinet ? <button className={css.Buttons} onClick={myCabinet}>Мій кабінет</button> :
+                             <button onClick={goToMainPage}>Головна сторінка</button> }
                         <button className={css.Buttons} onClick={exit}>Вихід</button>
                     </div>
 
                     :
                     <div>
-                        {isLogin ? <button onClick={goToMainPage}>Головна сторінка</button> :
-                            <button className={css.Buttons} onClick={login}>Авторизуватися</button>}
+                        {!isLogin && <button className={css.Buttons} onClick={login}>Авторизуватися</button>}
                         {isRegister ? <button onClick={goToMainPage}>Головна сторінка</button> :
                             <button className={css.Buttons} onClick={register}>Зареєструватися</button>}
                     </div>

@@ -2,7 +2,7 @@ import {axiosService} from "./axios.service";
 import {urls} from "../constants/urls";
 
 const commentService = {
-    findCommentsByUserLogin: (login, page = 1, old = false) => axiosService.get(`${urls.myComments}?login=${login}`, {
+    findCommentsByUserLogin: (login, page = 1, old = false) => axiosService.get(`${urls.comments}?login=${login}`, {
         params: {
             page,
             old

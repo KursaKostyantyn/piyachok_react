@@ -12,6 +12,7 @@ const initialState = {
     amountOfPages: 0,
     currentPage: 1,
     amountOfItems: 0,
+    filters: null,
     mainPlacePhoto: 'http://via.placeholder.com/250x300?text=No+Photo'
 }
 
@@ -123,6 +124,19 @@ const findAllActivatedPlaces = createAsyncThunk(
     }
 );
 
+
+const filterPLaces = createAsyncThunk(
+    'placeSlice/filterPLaces',
+    async ({rating, types, averageCheckFrom, averageCheckTo}, {rejectWithValue}) => {
+        try {
+            const {data} = await placeService.filterPLaces(rating, types, averageCheckFrom, averageCheckTo);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 const fillTheResponse = (state, action) => {
     state.errors = null;
     state.places = action.payload.items
@@ -150,10 +164,19 @@ const placeSlice = createSlice({
             state.amountOfPages = action.payload
             state.currentPage = action.payload
             state.amountOfItems = action.payload
+        },
+        setFilter: (state, action) => {
+            state.filters = action.payload;
         }
     },
     extraReducers: (builder) => {
         builder
+            .addCase(filterPLaces.fulfilled, (state, action) => {
+                state.errors = null;
+            })
+            .addCase(filterPLaces.rejected, (state, action) => {
+                state.errors = action.payload;
+            })
             .addCase(findAllActivatedPlaces.fulfilled, (state, action) => {
                 fillTheResponse(state, action);
             })
@@ -208,7 +231,7 @@ const placeSlice = createSlice({
     }
 });
 
-const {reducer: placeReducer, actions: {setCurrentPlace, setMainPLacePhoto, setPlaces}} = placeSlice;
+const {reducer: placeReducer, actions: {setCurrentPlace, setMainPLacePhoto, setPlaces, setFilter}} = placeSlice;
 
 
 const placeActions = {
@@ -223,7 +246,9 @@ const placeActions = {
     findPLaceByName,
     setPlaces,
     findAllActivatedPlaces,
-    updatePlaceById
+    updatePlaceById,
+    filterPLaces,
+    setFilter
 }
 
 export {

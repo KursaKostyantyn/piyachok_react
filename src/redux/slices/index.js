@@ -6,4 +6,4 @@ export * from './comment.slice';
 export * from './rating.slice';
 export * from './type.slice';
 export * from './features.slice';
-
+export * from './piyachok.slice';

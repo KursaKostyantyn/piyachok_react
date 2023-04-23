@@ -28,7 +28,7 @@ export * from './typesForCheckBox/TypesForCheckBox';
 export * from './typeCheckBox/TypeCheckBox';
 export * from './newsForm/NewsForm';
 export * from './commentForm/CommentForm';
-export * from './placeComments/placeComments';
+export * from './placeComments/PlaceComments';
 export * from './placeRating/PlaceRating';
 export * from './ratingForm/RatingForm';
 export * from './activateUser/ActivateUser';
@@ -44,3 +44,7 @@ export * from './features/Features';
 export * from './feature/Feature';
 export * from './featureFullInformation/FeatureFullInformation';
 export * from './featureForm/featureForm';
+export * from './piyachok/Piyachok';
+export * from './piyachoks/Piyachoks';
+export * from './piyachokForm/PiyachokForm';
+

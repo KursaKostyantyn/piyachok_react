@@ -118,12 +118,12 @@ const Places = () => {
                 <form onSubmit={handleSubmit(submit)}>
                     <select name='select' {...register('sort')}>
                         <option value='default'>Оберіть вид сортування</option>
-                        {alphabet ?
+                        {!alphabet ?
                             <option value='sortByAlphabet'>сортувати я-а</option> :
                             <option value='sortByAlphabet'>сортувати а-я</option>
                         }
 
-                        {old ?
+                        {!old ?
                             <option value='sortByDate'>спочатку старі</option> :
                             <option value='sortByDate'>спочатку нові</option>
                         }

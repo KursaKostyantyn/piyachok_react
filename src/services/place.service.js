@@ -40,6 +40,14 @@ const placeService = {
             placeName,
             page
         }
+    }),
+    filterPLaces: (rating, types, averageCheckFrom, averageCheckTo) => axiosService.get(`${urls.places}/filters`, {
+        params: {
+            rating,
+            types,
+            averageCheckFrom,
+            averageCheckTo
+        }
     })
 
 }

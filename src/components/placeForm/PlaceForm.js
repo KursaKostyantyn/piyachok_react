@@ -64,7 +64,7 @@ const PlaceForm = () => {
             setValue('workSchedule.sundayEnd', currentPlace.workSchedule.sundayEnd)
             setValue('contacts.phone', currentPlace.contacts.phone)
             setValue('contacts.email', currentPlace.contacts.email)
-            setValue('isActivated', currentPlace.activated)
+            setValue('activated', currentPlace.activated)
             setValue('description', currentPlace.description)
             for (let i = 0; i < currentPlace.types.length; i++) {
                 setValue(`types.${currentPlace.types[i].name}`, true)
@@ -202,7 +202,7 @@ const PlaceForm = () => {
                 <div>
                     <h4>Активовано</h4>
                     <input type={'checkbox'} placeholder={'Активовано'}
-                           disabled={isDisabledCheckBoxActivated} {...register('isActivated')}/>
+                           disabled={isDisabledCheckBoxActivated} {...register('activated')}/>
                 </div>
                 <div>
                     <h4>Опис закладу</h4>
