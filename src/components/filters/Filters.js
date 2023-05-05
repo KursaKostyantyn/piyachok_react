@@ -21,7 +21,6 @@ const Filters = () => {
                 }
         }
         const types=Object.keys(data.types).toString();
-        console.log(types)
 
         await dispatch(placeActions.setFilter(data))
         await dispatch(placeActions.filterPLaces({

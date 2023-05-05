@@ -38,6 +38,7 @@ export * from './featuresPage/FeaturesPage';
 export * from './featureFullInformationPage/FeatureFullInformationPage';
 export * from './piyachoksPage/PiyachoksPage';
 export * from './piyachokFormPage/PiyachokFormPage';
-
+export * from './topsPage/TopsPage';
+export * from './topFormPage/TopFormPage';
 
 

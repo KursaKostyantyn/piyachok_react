@@ -137,6 +137,30 @@ const filterPLaces = createAsyncThunk(
     }
 );
 
+const addListTopsToPLace = createAsyncThunk(
+    'placeSlice/addListTopsToPLace',
+    async ({placeId,topsId},{rejectWithValue})=>{
+        try {
+            const {data} = await placeService.addListTopsToPLace(topsId,placeId);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
+const updateListOfFeaturesById = createAsyncThunk(
+    'placeSlice/updateListOfFeaturesById',
+    async ({placeId, featureIds},{rejectWithValue})=>{
+        try {
+            const {data} = await placeService.updateListOfFeaturesById(placeId,featureIds);
+            return data;
+        } catch (e) {
+            return rejectWithValue(e.response.data)
+        }
+    }
+);
+
 const fillTheResponse = (state, action) => {
     state.errors = null;
     state.places = action.payload.items
@@ -171,6 +195,18 @@ const placeSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(updateListOfFeaturesById.fulfilled,(state, action) => {
+                state.errors=null;
+            })
+            .addCase(updateListOfFeaturesById.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
+            .addCase(addListTopsToPLace.fulfilled,(state, action) => {
+                state.errors=null;
+            })
+            .addCase(addListTopsToPLace.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
             .addCase(filterPLaces.fulfilled, (state, action) => {
                 state.errors = null;
             })
@@ -248,7 +284,9 @@ const placeActions = {
     findAllActivatedPlaces,
     updatePlaceById,
     filterPLaces,
-    setFilter
+    setFilter,
+    addListTopsToPLace,
+    updateListOfFeaturesById
 }
 
 export {

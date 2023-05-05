@@ -81,6 +81,10 @@ const CabinetMenu = () => {
         navigate('piyachoks')
     }
 
+    const allTops=()=>{
+        navigate('tops')
+    }
+
 
     return (
         <div className={css.Wrap}>
@@ -101,6 +105,7 @@ const CabinetMenu = () => {
             {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={notActivated}>Всі не активовані заклади</button>}
             {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allFeatures}>Всі особливості закладів</button>}
             {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allPiyachoks}>Всі пиячки</button>}
+            {isSuperAdmin && <button className={css.CabinetMenuButtons} onClick={allTops}>Всі топ категорії</button>}
 
 
         </div>

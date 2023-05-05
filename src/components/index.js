@@ -47,4 +47,7 @@ export * from './featureForm/featureForm';
 export * from './piyachok/Piyachok';
 export * from './piyachoks/Piyachoks';
 export * from './piyachokForm/PiyachokForm';
+export * from './top/Top';
+export * from './tops/Tops';
+export * from './topForm/TopForm';
 

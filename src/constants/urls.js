@@ -17,7 +17,8 @@ const urls={
     activate:'/activate',
     search:'/search',
     features:'/features',
-    piyachoks:'/piyachoks'
+    piyachoks:'/piyachoks',
+    tops:'/tops'
 }
 
 export {

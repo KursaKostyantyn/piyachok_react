@@ -8,7 +8,7 @@ import {
     commentsReducer,
     ratingReducer,
     typeReducer,
-    featureReducer, piyachokReducer
+    featureReducer, piyachokReducer, topReducer
 } from "./slices";
 
 
@@ -21,7 +21,8 @@ const rootReducer = combineReducers({
     ratings: ratingReducer,
     types: typeReducer,
     features: featureReducer,
-    piyachoks:piyachokReducer
+    piyachoks: piyachokReducer,
+    tops: topReducer
 });
 
 const setupStore = configureStore({

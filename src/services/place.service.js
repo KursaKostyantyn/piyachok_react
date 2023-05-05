@@ -48,7 +48,9 @@ const placeService = {
             averageCheckFrom,
             averageCheckTo
         }
-    })
+    }),
+    addListTopsToPLace:(topIds,placeId)=>axiosService.get(`${urls.places}/${placeId}/tops`, {params:{topIds}}),
+    updateListOfFeaturesById:(placeId,featureIds)=>axiosService.put(`${urls.places}/${placeId}/updateFeatures`,{},{params:{featureIds}})
 
 }
 

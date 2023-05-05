@@ -1,19 +1,13 @@
 import {Outlet} from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import {useSelector} from "react-redux";
 
 import {CabinetMenu, Header} from "../../components";
 import css from './LoggedLayout.module.css'
-import {authActions} from "../../redux";
 
 
 const LoggedLayout = () => {
 
     const {errors} = useSelector(state => state.users);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(authActions.getAuthorizedUser())
-    }, [dispatch])
     return (
         <div>
             <Header/>

@@ -7,3 +7,4 @@ export * from './rating.slice';
 export * from './type.slice';
 export * from './features.slice';
 export * from './piyachok.slice';
+export * from './top.slice';

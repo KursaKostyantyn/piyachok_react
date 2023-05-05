@@ -18,7 +18,9 @@ import {
     MyRatingPage,
     NewsFormPage,
     NotfoundPage,
-    OneNewsFullInformationPage, PiyachokFormPage, PiyachoksPage,
+    OneNewsFullInformationPage,
+    PiyachokFormPage,
+    PiyachoksPage,
     PlaceCommentsPage,
     PlaceFormPage,
     PlaceFullInformationPage,
@@ -29,6 +31,8 @@ import {
     ResetPasswordFormPage,
     SearchFormPage,
     SendResetPasswordTokenFormPage,
+    TopFormPage,
+    TopsPage,
     TypeFormPage,
     TypeFullInformationPage,
     TypesPage,
@@ -38,8 +42,17 @@ import {
     UsersPage
 } from "./pages";
 
+import {useDispatch} from "react-redux";
+import {useEffect} from "react";
+import {authActions} from "./redux";
+
 
 const App = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(authActions.getAuthorizedUser());
+    }, [dispatch])
 
     return (
         <div>
@@ -118,7 +131,6 @@ const App = () => {
                             <Route path={'update'} element={<NewsFormPage/>}/>
                             <Route path={''} element={<OneNewsFullInformationPage/>}/>
                         </Route>
-
                     </Route>
 
                     <Route path={'myPlaces'}>
@@ -263,7 +275,13 @@ const App = () => {
                         <Route path={'createFeature'} element={<FeatureFormPage/>}/>
                     </Route>
 
+                    <Route path={'tops'}>
+                        <Route path={''} element={<TopsPage/>}/>
+                        <Route path={'createTop'} element={<TopFormPage/>}/>
+                    </Route>
+
                 </Route>
+
 
                 <Route path={'*'} element={<NotfoundPage/>}/>
             </Routes>
