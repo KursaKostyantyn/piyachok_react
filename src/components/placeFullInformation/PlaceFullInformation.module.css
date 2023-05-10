@@ -22,3 +22,8 @@
     display: flex;
     justify-content: left;
 }
+
+.TextArea {
+    height: 150px;
+    width: 350px;
+}

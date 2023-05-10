@@ -161,6 +161,18 @@ const updateListOfFeaturesById = createAsyncThunk(
     }
 );
 
+const sendMailToAdmin = createAsyncThunk(
+    'placeSlice/sendMailToAdmin',
+    async ({placeId,text},{rejectWtihValue})=>{
+        try {
+            const {data} = await placeService.sendMailToAdmin(text,placeId);
+            return data;
+        } catch (e) {
+            return rejectWtihValue(e.response.data)
+        }
+    }
+);
+
 const fillTheResponse = (state, action) => {
     state.errors = null;
     state.places = action.payload.items
@@ -195,6 +207,12 @@ const placeSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+            .addCase(sendMailToAdmin.fulfilled,(state, action) => {
+                state.errors=null;
+            })
+            .addCase(sendMailToAdmin.rejected,(state, action) => {
+                state.errors=action.payload;
+            })
             .addCase(updateListOfFeaturesById.fulfilled,(state, action) => {
                 state.errors=null;
             })
@@ -286,7 +304,8 @@ const placeActions = {
     filterPLaces,
     setFilter,
     addListTopsToPLace,
-    updateListOfFeaturesById
+    updateListOfFeaturesById,
+    sendMailToAdmin
 }
 
 export {

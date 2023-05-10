@@ -50,7 +50,8 @@ const placeService = {
         }
     }),
     addListTopsToPLace:(topIds,placeId)=>axiosService.get(`${urls.places}/${placeId}/tops`, {params:{topIds}}),
-    updateListOfFeaturesById:(placeId,featureIds)=>axiosService.put(`${urls.places}/${placeId}/updateFeatures`,{},{params:{featureIds}})
+    updateListOfFeaturesById:(placeId,featureIds)=>axiosService.put(`${urls.places}/${placeId}/updateFeatures`,{},{params:{featureIds}}),
+    sendMailToAdmin:(text,placeId)=>axiosService.put(`${urls.places}/sendMailToAdmin/${placeId}`,text)
 
 }
 

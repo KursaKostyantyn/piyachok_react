@@ -21,12 +21,13 @@ const PlaceFullInformation = () => {
     const [addPhotoError, setAddPhotoError] = useState(null);
     const [isMyCabinet, setIsMyCabinet] = useState(false);
     const [addingToTop, setAddingToTop] = useState(false);
+    const [mailToAdmin,setMailToAdmin] = useState(false);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
     const params = useParams();
-    const {register, handleSubmit, setValue} = useForm();
+    const {register, handleSubmit, reset, setValue} = useForm();
 
     useEffect(() => {
         if (((authorizedUser !== null
@@ -48,7 +49,7 @@ const PlaceFullInformation = () => {
         if (place !== null) {
             dispatch(topActions.findTopsByPlaceId({placeId: place.id}))
         }
-    }, [place])
+    }, [place,dispatch])
 
 
     useEffect(() => {
@@ -64,7 +65,7 @@ const PlaceFullInformation = () => {
         } else {
             setPhotos(['http://via.placeholder.com/250x300?text=No+Photo'])
         }
-    }, [currentPlace, authorizedUser])
+    }, [currentPlace, authorizedUser,dispatch])
 
     useEffect(() => {
         if (currentPlace !== null) {
@@ -80,7 +81,7 @@ const PlaceFullInformation = () => {
             }));
         }
 
-    }, [place, authorizedUser])
+    }, [place, authorizedUser,dispatch])
 
     useEffect(() => {
         if (location.pathname.includes('myCabinet')) {
@@ -92,7 +93,7 @@ const PlaceFullInformation = () => {
 
     useEffect(() => {
         dispatch(topActions.findAllTops({page: 1}))
-    }, [addingToTop])
+    }, [addingToTop,dispatch])
 
     useEffect(() => {
         if (addingToTop === true && placeTops !== 0) {
@@ -185,6 +186,17 @@ const PlaceFullInformation = () => {
         await dispatch(placeActions.addListTopsToPLace({placeId: place.id, topsId: newTops.toString()}))
         await dispatch(topActions.findTopsByPlaceId({placeId: place.id}))
     }
+
+    const showMailToAdmin=()=>{
+        setMailToAdmin(!mailToAdmin);
+    }
+
+    const sendMailToAdmin=async (data)=>{
+        await dispatch(placeActions.sendMailToAdmin({text:data, placeId:place.id}));
+        reset();
+        showMailToAdmin();
+    }
+
 
     return (
         <div>
@@ -280,7 +292,15 @@ const PlaceFullInformation = () => {
 
 
             </div>}
+            <button onClick={showMailToAdmin}>Написати адміну</button>
+            <div hidden={mailToAdmin}>
+                <form onSubmit={handleSubmit(sendMailToAdmin)}>
+                    <textarea className={css.TextArea} placeholder={'написати адміну'} {...register('sendMailToAdmin')}/>
+                    <button>Відправити текст адміну</button>
+                </form>
+            </div>
             {<div><RatingForm/></div>}
+
 
 
             <button onClick={goToNews}>Новини</button>
